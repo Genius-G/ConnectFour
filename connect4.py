@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 '''
-version 0.1 - 10.Jan 2020
+version 0.1 - 10.Jan1 2020
 
 Der Code enthält bisher:
     Methoden für...
@@ -34,14 +34,14 @@ from colorama import Fore, Back, Style
 
 
 # Setup –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-board = np.zeros((7,6)) # erstellt Spielbrett (einfachkeitshalber transponiert)
-columns = np.full(7,6)  # 6 statt 5 für Verständlichkeit ("n freie Felder")
-#player = -1             # legt den aktuellen Spieler fest {-1, 1}
-player = random.choice([-1,1])
+board = np.zeros((7, 6)) # erstellt Spielbrett (einfachkeitshalber transponiert)
+columns = np.full(7, 6)  # 6 statt 5 für Verständlichkeit ("n freie Felder")
+#p layer = -1             # legt den aktuellen Spieler fest {-1, 1}
+player = random.choice([-1, 1])
 counter = 0
 
-#print(board.T)
-#print(columns)
+# print(board.T)
+# print(columns)
 
 
 # Display functions –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
