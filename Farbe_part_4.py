@@ -197,6 +197,8 @@ def gotoPosition2mitDrucksensor(currPosition):
                         currPosition += 1
 
 
+                        
+# Manuelles Fahren mit Buttons auf Brick                        
 def gotoPosition3():
 
     def left3(state):
