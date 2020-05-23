@@ -1,73 +1,127 @@
-"""
-This class represents a board used in a typical 'ConnectFour' Game
-"""
+#!/usr/bin/python3
+
 import numpy as np
 
 
 class Board:
+    """ This class represents a board used in a standart ConnectFour Game """
 
     # Constructor
-    def __init__(self, height=6, width=7):
-        self.height = height
-        self.width = width
-        self.board = np.zeros((height, width), dtype=int)
+    def __init__(self):
+        self.board = np.zeros((6, 7))
+        self.colors = [-1, 1]
 
     # Enter a piece to the board
     def enterPiece(self, player, col):
+        """ enter a piece the board """
         # check if desired col is full
         if col in self.selectableColumns():
-            for row in range(self.height - 1, -1, -1):
+            for row in range(5, -1, -1):
                 # check from bottom to top where entered piece stops
                 if self.board[row][col] == 0:
                     self.board[row][col] = player
-                    print("matrix changed at ", row, col, "to", player)
                     break
         else:
-            # give back an error
-            raise ValueError('%d is already full', col)
+            print("%d ist schon voll.", col)
 
-    # Check For a Winner
-    def checkForWinner(self):
-        return self.checkVertically() + self.checkHorizontally() + \
-               self.checkDiagonallyFalling() + self.checkDiagonallyRising()
-
-    # Check rows for winner
-    def checkHorizontally(self):
-        for row in range(self.height):
-            for col in range(self.width - 3):
-                if (self.board[row][col] == self.board[row][col + 1] == self.board[row][col + 2] ==
-                        self.board[row][col + 3]) and (self.board[row][col] != " "):
-                    return self.board[row][col]
-
-    # Check columns for winner
-    def checkVertically(self):
-        for col in range(self.height):
-            for row in range(self.width - 3):
-                if (self.board[row][col] == self.board[row + 1][col] == self.board[row + 2][col] ==
-                        self.board[row + 3][col]) and (self.board[row][col] != " "):
-                    return self.board[row][col]
-
-    # Check diagonal (top-left to bottom-right) for winner
-    def checkDiagonallyFalling(self):
-        for row in range(self.height - 3):
-            for col in range(self.width - 3):
-                if (self.board[row][col] == self.board[row + 1][col + 1] == self.board[row + 2][col + 2] ==
-                        self.board[row + 3][col + 3]) and (self.board[row][col] != " "):
-                    return self.board[row][col]
-
-    # Check diagonal (bottom-left to top-right) for winner
-    def checkDiagonallyRising(self):
-        for row in range(self.height - 1, 2, -1):
-            for col in range(3):
-                if (self.board[row][col] == self.board[row - 1][col + 1] == self.board[row - 2][col + 2] ==
-                        self.board[row - 3][col + 3]) and (self.board[row][col] != " "):
-                    return self.board[row][col]
-
-    # check if columns are full
     def selectableColumns(self):
-        selectableColumns = list(range(self.width))
-        for col in range(self.width):
-            if self.board[0][col] != 0:
-                print("Column", col, "is full")
+        """ give a list of all selectable columns """
+        selectableColumns = list(range(7))
+        for col in range(7):
+            if self.board[0][col] != 0 and col in selectableColumns:
                 selectableColumns.remove(col)
         return selectableColumns
+
+    # check for number of streaks of length streak: (int)
+    def checkForStreak(self, color, streak):
+        count = 0
+        # for each piece in the board...
+        for i in range(6):
+            for j in range(7):
+                # ...that is of the color we're looking for...
+                if self.board[i][j] == color:
+                    # check if a vertical streak starts at (i, j)
+                    count += self.verticalStreak(i, j, streak)
+                    
+                    # check if a horizontal four-in-a-row starts at (i, j)
+                    count += self.horizontalStreak(i, j, streak)
+                    
+                    # check if a diagonal (either way) four-in-a-row starts at (i, j)
+                    count += self.diagonalCheck(i, j, streak)
+        # return the sum of streaks of length 'streak'
+        return count
+            
+    def verticalStreak(self, row, col, streak):
+        consecutiveCount = 0
+        for i in range(row, 6):
+            if self.board[i][col] == self.board[row][col]:
+                consecutiveCount += 1
+            else:
+                break
+    
+        if consecutiveCount >= streak:
+            return 1
+        else:
+            return 0
+    
+    def horizontalStreak(self, row, col, streak):
+        consecutiveCount = 0
+        for j in range(col, 7):
+            if self.board[row][j] == self.board[row][col]:
+                consecutiveCount += 1
+            else:
+                break
+
+        if consecutiveCount >= streak:
+            return 1
+        else:
+            return 0
+    
+    def diagonalCheck(self, row, col, streak):
+
+        total = 0
+        # check for diagonals with positive slope
+        consecutiveCount = 0
+        j = col
+        for i in range(row, 6):
+            if j > 6:
+                break
+            elif self.board[i][j] == self.board[row][col]:
+                consecutiveCount += 1
+            else:
+                break
+            j += 1 # increment column when row is incremented
+            
+        if consecutiveCount >= streak:
+            total += 1
+
+        # check for diagonals with negative slope
+        consecutiveCount = 0
+        j = col
+        for i in range(row, -1, -1):
+            if j > 6:
+                break
+            elif self.board[i][j] == self.board[row][col]:
+                consecutiveCount += 1
+            else:
+                break
+            j += 1 # increment column when row is incremented
+
+        if consecutiveCount >= streak:
+            total += 1
+
+        return total
+
+    # Check For a Winner
+    def checkForWinner(self):       
+        if self.checkForStreak(self.colors[0], 4) > 0 or self.checkForStreak(self.colors[1], 4) > 0:
+            return True
+        else:
+            return False
+
+    # Check For a Draw
+    def checkForDraw(self):
+        if len(self.selectableColumns()) == 0:
+            return True
+        else: 
+            return False
