@@ -12,7 +12,10 @@ import time
 
 
 class Robot():
+    """ Diese Klasse beschreibt die Möglichkeiten des Roboters.
+        Er kann einen Wagen bewegen und dieser einen Chip loslassen.
 
+    """
     def __init__(self):
         # Connect EV3 with motors
         self.move_wagon_Motor = LargeMotor('outA')
@@ -24,9 +27,10 @@ class Robot():
         self.color_Sensor.mode = 'COL-COLOR'
         self.colors = {'No Color':0, 'Black':1, 'White':6, 'Red':5}
 
-        # Falls Berührungsensoren doch notwendig werden
+        # Ein Berührungsensor zum Kalibrieren
         self.touch_Sensor_1 = TouchSensor('in1')
-        self.touch_Sensor_2 = TouchSensor('in2')
+
+        # Nutze die Tasten des Brick zur Steuerung
         self.button = Button()
         self.screen = Screen()
 
@@ -58,8 +62,9 @@ class Robot():
         return currPosition
 
     def updatePosition(self):
-        """ return the current position according to the color sensor """
-        position 
+        """ Lege die aktuelle Position mittels des Farbsensors fest """
+        # TODO Teste diese Implemtierung
+        position = self.color_Sensor.value()
         self.currentPossition = position
 
     def releaseCoin(self): #laesst Spielstein los
@@ -105,6 +110,7 @@ class Robot():
                 time.sleep(1)
                 self.color_Sensor.calibrate_white()
                 break
+        return 0
 
     #--------------------------------------v Sophie v-------------------------------------------------------
 
@@ -137,7 +143,7 @@ class Robot():
             #self.screen.draw.text((10, 10), zielspalte , font=fonts.load('luBS14'))
         return zielspalte
 
-    def gotoPosition1(self, zielspalte,currPosition):
+    def gotoPosition1(self, zielspalte, currPosition):
         print("gotoPosition")
         colorstatus = 0 #speichert temporar die Farbe
         if currPosition < zielspalte:
@@ -318,4 +324,5 @@ class Robot():
         releaseCoin()
     
     def playMusic(self):
+        # TODO Coole Musik abspielen
         pass

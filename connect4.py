@@ -10,30 +10,18 @@ from Minimax import Minimax
 
 class Connect4:
     '''
-    version 0.2 - 22.Mai 2020
+    version 0.9 - 09.Juni 2020
 
     Der Code enthält bisher:
         Methoden für...
         ... eine Bildschirmausgabe
         ... das Platzieren eines Chips
-        ... das Überprüfen eines Zuges auf Win States   (effizient, limitiert)
-        ... das Überprüfen eines Boardes auf Win States (ineffizient, universal)
 
     Es fehlen:
         Methoden für...
         ... das Evaluieren potentieller Spielzüge
         ... die Auswahl eines Spielzuges anhand vorheriger Evaluationen
         ... die Interaktion mit dem Roboter (wartet auf finales Design)
-
-    Weiteres Vorgehen:
-        Der Algorithmus soll anhand versteckter Spielbretter n Züge (n < 5) in
-        die Zukunft sehen und entscheiden, welcher Weg durch die Spielzüge ihm
-        die größte Chance auf einen Sieg verschafft. Dazu kann auch berücksich-
-        tigt werden, dass in Connect 4 "Fallen" existieren, was theoretisch so-
-        gar die Vorhersage eines Sieges in mehr als n Zügen erlaubt.
-        Weiterhin sollen nach Fertigstellung eines funktionierenden Konzepts
-        des Roboters die Methoden zur Steuerung der Motoren hier implementiert
-        werden.
     '''
 
     # Constructor
@@ -126,20 +114,18 @@ class Connect4:
 
     # AI stuff ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
     def randomMove(self):
-        """ returns a random move from possible moves """
+        """ returns a random move from possible moves between {1, ..., 7} """
         return random.choice(self.gameboard.selectableColumns()) + 1
 
-    def calculateResponses(self, board, columns, player):
-        """ Some unfinished buisness """
-        for col in range(7):
-            _board = self.gameboard
-            _player = self.player
-            if col in _board.selectableColumns():
-                _board.enterPiece(player, col)
+    def calculateResponses(self, difficulty):
+        """ look ahead with minimax """
+        mini = Minimax(self.gameboard)
+        return mini.bestMove(difficulty, self.player)
 
-    # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––--
     def enterPiece(self, player, col):
         """ enters the Piece at col for player """
+        self.counter += 1
         self.gameboard.enterPiece(player, col)
 
     def passTurn(self):
@@ -147,7 +133,7 @@ class Connect4:
         self.player *= -1
     
     def main(self):
-        """ It rolls the flow of a game """
+        """ This is demonstration on the console """
         print()
         self.showIndicators()
         self.showBoard()
@@ -161,9 +147,8 @@ class Connect4:
             col = -1
             # Testing AI
             if self.player == 1:
-                col = self.randomMove()
-                mini = Minimax(self.gameboard)
-                #col, _ = mini.bestMove(3, 1)
+                #col = self.randomMove()
+                col = self.calculateResponses(3)
             else:
                 # Lese Input aus der Kommandozeile ein
                 col = self.readInputFromConsole()

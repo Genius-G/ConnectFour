@@ -23,11 +23,13 @@ class Minimax():
         legal_moves = {} 
         for col in self.gameboard.selectableColumns():
             # make the move in column 'col' for curr_player
+            temp = Board()
             temp = self.gameboard
             temp.enterPiece(curr_player, col)
             # Füge Spielzug an der Stelle col hinzu
             legal_moves[col] = -self.search(depth-1, temp, opp_player)
         
+        print(len(legal_moves))
         # legt den niedrigsten wert fest
         best_alpha = -99999999
         best_move = None
@@ -38,7 +40,7 @@ class Minimax():
                 best_alpha = alpha
                 best_move = move
         
-        return best_move, best_alpha
+        return best_move
         
     def search(self, depth, gameboard, curr_player):
         """ 
@@ -49,6 +51,7 @@ class Minimax():
         legal_moves = []
         for col in gameboard.selectableColumns():
             # make the move in column i for curr_player
+            temp = Board()
             temp = gameboard
             temp.enterPiece(curr_player, col)
             legal_moves.append(temp)
