@@ -5,6 +5,7 @@ import os
 import numpy as np
 from colorama import Fore, Back, Style
 from Board import Board
+from Minimax import Minimax
 
 
 class Connect4:
@@ -125,7 +126,7 @@ class Connect4:
 
     # AI stuff ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
     def randomMove(self):
-        """ Some unfinished buisness """
+        """ returns a random move from possible moves """
         return random.choice(self.gameboard.selectableColumns()) + 1
 
     def calculateResponses(self, board, columns, player):
@@ -137,6 +138,14 @@ class Connect4:
                 _board.enterPiece(player, col)
 
     # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    def enterPiece(self, player, col):
+        """ enters the Piece at col for player """
+        self.gameboard.enterPiece(player, col)
+
+    def passTurn(self):
+        """ passes the turn and changes the current player """
+        self.player *= -1
+    
     def main(self):
         """ It rolls the flow of a game """
         print()
@@ -149,9 +158,12 @@ class Connect4:
             # Zeige welche Farbe am Zug ist
             self.showTurnOrder()
             
+            col = -1
             # Testing AI
             if self.player == 1:
                 col = self.randomMove()
+                mini = Minimax(self.gameboard)
+                #col, _ = mini.bestMove(3, 1)
             else:
                 # Lese Input aus der Kommandozeile ein
                 col = self.readInputFromConsole()
@@ -167,10 +179,6 @@ class Connect4:
 
                 # Lösche die Ausgabe auf der Konsole
                 self.clearScreen()
-                self.clearScreen()
-                self.clearScreen()
-                self.clearScreen()
-                
 
                 # Gebe die Änderung aus
                 self.showIndicators()
@@ -185,14 +193,14 @@ class Connect4:
                 if self.finished:
                     self.showEndOfGame()
                     break
-                                
+
                 # Spielerwechsel
                 self.player *= -1
 
-# Zum Aufruf der main Funktion aus der Klasse Game, um das Spiel zu starten.
-def main():
-    Connect4().main()
-
+            else:
+                print("Spalte {} ist schon voll".format(col))
+            
 # main Methode zum Ausführen bei Aufruf
 if __name__ == "__main__": 
-    main()
+    game = Connect4()
+    game.main()
