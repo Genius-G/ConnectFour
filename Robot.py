@@ -99,7 +99,9 @@ class Robot():
             self.button.process()
 
     def calibrate(self):
-        """ fährt so lange in eine Richtung bis ein Berührungsensor auslöst, dann kalibriert er für die Farba Weiß """
+        """ fährt so lange in eine Richtung bis ein Berührungsensor auslöst, 
+        dann kalibriert er für die Farba Weiß 
+        """
         self.move_wagon_Motor.run_forever(speed_sp=1000)
         # Versuche die ersten 10 Sekunden zu kalibrieren
         # time() liefert Zeit in Mikrosekunden seit Aufruf
@@ -172,8 +174,8 @@ class Robot():
             #TODO: maja diese zwei if-Bedingungen ähneln sich vom Code stark. Vielleicht lohnt sich dafür auch noch ne extra Funktion, allerdings wird mit dem Bewegungscounter anders umgegangen
 
     def gotoPosition2(self, currPosition):
-        zielspalte= currPosition
-        colorstatus= color_Sensor.color
+        zielspalte = currPosition
+        colorstatus = self.color_Sensor.color
 
         def left2(state, zielspalte):
             if state:

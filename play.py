@@ -18,7 +18,7 @@ class LegoRobot():
         # Er bestätigt die Eingabe mit Enter
 
         # Zum Schluss wird der Coin eingeschmissen beim Roboter ...
-        self.robot.deliverCoin()
+        self.robot.releaseCoin()
         # ... und beim Game
         self.game.enterPiece(1, self.robot.getCurrentPosition())
 
@@ -45,11 +45,11 @@ class LegoRobot():
 
             # Der menschliche Spieler ist an der Reihe
             if self.game.player == 1:
-                humanPlayersTurn()
+                self.humanPlayersTurn()
 
             # Der Roboter ist an der Reihe
             else:
-                robotPlayersTurn()
+                self.robotPlayersTurn()
                 
             # Nachdem einer der beiden dran war, wird getauscht
             self.game.passTurn()
