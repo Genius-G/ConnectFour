@@ -46,8 +46,6 @@ class Robot():
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(3)
                 break
-            currPosition= 0
-            return currPosition
 
     def getYellowCoin(self):
         """ Holt sich einen gelben Chip """
@@ -58,8 +56,6 @@ class Robot():
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(3)
                 break
-        currPosition = 8
-        return currPosition
 
     def updatePosition(self):
         """ Lege die aktuelle Position mittels des Farbsensors fest """

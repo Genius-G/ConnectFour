@@ -40,22 +40,10 @@ class LegoRobot():
             Darin spielt ein Mensch gegen den Roboter.
         """
 
-        # Game Loop
-        while self.game.finished == False:
+        # Teste das ganze Projekt und ob es möglich ist das Ganze mit mehrern files zu machen
+        self.robot.releaseCoin()
 
-            # Der menschliche Spieler ist an der Reihe
-            if self.game.player == 1:
-                self.humanPlayersTurn()
-
-            # Der Roboter ist an der Reihe
-            else:
-                self.robotPlayersTurn()
-                
-            # Nachdem einer der beiden dran war, wird getauscht
-            self.game.passTurn()
-
-        # Wenn gewonnen wurde, dann eine coole Melodie spielen
-        self.robot.playMusic()
+    
 
 if __name__ == "__main__": # Default "main method" idiom.
     LegoRobot = LegoRobot()
