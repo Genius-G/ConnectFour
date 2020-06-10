@@ -5,34 +5,23 @@ import os
 import numpy as np
 from colorama import Fore, Back, Style
 from Board import Board
+from Minimax import Minimax
 
 
 class Connect4:
     '''
-    version 0.2 - 22.Mai 2020
+    version 0.9 - 09.Juni 2020
 
     Der Code enthält bisher:
         Methoden für...
         ... eine Bildschirmausgabe
         ... das Platzieren eines Chips
-        ... das Überprüfen eines Zuges auf Win States   (effizient, limitiert)
-        ... das Überprüfen eines Boardes auf Win States (ineffizient, universal)
 
     Es fehlen:
         Methoden für...
         ... das Evaluieren potentieller Spielzüge
         ... die Auswahl eines Spielzuges anhand vorheriger Evaluationen
         ... die Interaktion mit dem Roboter (wartet auf finales Design)
-
-    Weiteres Vorgehen:
-        Der Algorithmus soll anhand versteckter Spielbretter n Züge (n < 5) in
-        die Zukunft sehen und entscheiden, welcher Weg durch die Spielzüge ihm
-        die größte Chance auf einen Sieg verschafft. Dazu kann auch berücksich-
-        tigt werden, dass in Connect 4 "Fallen" existieren, was theoretisch so-
-        gar die Vorhersage eines Sieges in mehr als n Zügen erlaubt.
-        Weiterhin sollen nach Fertigstellung eines funktionierenden Konzepts
-        des Roboters die Methoden zur Steuerung der Motoren hier implementiert
-        werden.
     '''
 
     # Constructor
@@ -125,20 +114,26 @@ class Connect4:
 
     # AI stuff ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
     def randomMove(self):
-        """ Some unfinished buisness """
+        """ returns a random move from possible moves between {1, ..., 7} """
         return random.choice(self.gameboard.selectableColumns()) + 1
 
-    def calculateResponses(self, board, columns, player):
-        """ Some unfinished buisness """
-        for col in range(7):
-            _board = self.gameboard
-            _player = self.player
-            if col in _board.selectableColumns():
-                _board.enterPiece(player, col)
+    def calculateResponses(self, difficulty):
+        """ look ahead with minimax """
+        mini = Minimax(self.gameboard)
+        return mini.bestMove(difficulty, self.player)
 
-    # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––--
+    def enterPiece(self, player, col):
+        """ enters the Piece at col for player """
+        self.counter += 1
+        self.gameboard.enterPiece(player, col)
+
+    def passTurn(self):
+        """ passes the turn and changes the current player """
+        self.player *= -1
+    
     def main(self):
-        """ It rolls the flow of a game """
+        """ This is demonstration on the console """
         print()
         self.showIndicators()
         self.showBoard()
@@ -149,9 +144,11 @@ class Connect4:
             # Zeige welche Farbe am Zug ist
             self.showTurnOrder()
             
+            col = -1
             # Testing AI
             if self.player == 1:
-                col = self.randomMove()
+                #col = self.randomMove()
+                col = self.calculateResponses(3)
             else:
                 # Lese Input aus der Kommandozeile ein
                 col = self.readInputFromConsole()
@@ -167,10 +164,6 @@ class Connect4:
 
                 # Lösche die Ausgabe auf der Konsole
                 self.clearScreen()
-                self.clearScreen()
-                self.clearScreen()
-                self.clearScreen()
-                
 
                 # Gebe die Änderung aus
                 self.showIndicators()
@@ -185,14 +178,14 @@ class Connect4:
                 if self.finished:
                     self.showEndOfGame()
                     break
-                                
+
                 # Spielerwechsel
                 self.player *= -1
 
-# Zum Aufruf der main Funktion aus der Klasse Game, um das Spiel zu starten.
-def main():
-    Connect4().main()
-
+            else:
+                print("Spalte {} ist schon voll".format(col))
+            
 # main Methode zum Ausführen bei Aufruf
 if __name__ == "__main__": 
-    main()
+    game = Connect4()
+    game.main()

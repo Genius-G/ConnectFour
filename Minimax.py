@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 
 import random
 from Board import Board
@@ -23,11 +23,14 @@ class Minimax():
         legal_moves = {} 
         for col in self.gameboard.selectableColumns():
             # make the move in column 'col' for curr_player
+            temp = Board()
             temp = self.gameboard
             temp.enterPiece(curr_player, col)
             # Füge Spielzug an der Stelle col hinzu
             legal_moves[col] = -self.search(depth-1, temp, opp_player)
         
+        print(len(legal_moves))
+        # legt den niedrigsten wert fest
         best_alpha = -99999999
         best_move = None
         moves = legal_moves.items()
@@ -37,28 +40,26 @@ class Minimax():
                 best_alpha = alpha
                 best_move = move
         
-        return best_move, best_alpha
+        return best_move
         
     def search(self, depth, gameboard, curr_player):
-        """ Searches the tree at depth 'depth'
-            By default, the state is the board, and curr_player is whomever 
-            called this search
-            
-            Returns the alpha value
+        """ 
+            gibt den alpha wert zurück
         """
-        
-        # if this node (state) is a terminal node or depth == 0...
-        if depth == 0 or gameboard.checkForWinner() or gameboard.checkForDraw():
-            # return the heuristic value of node
-            return self.value(gameboard, curr_player)
-        
+
         # enumerate all legal moves from this state
         legal_moves = []
         for col in gameboard.selectableColumns():
             # make the move in column i for curr_player
+            temp = Board()
             temp = gameboard
             temp.enterPiece(curr_player, col)
             legal_moves.append(temp)
+        
+        # if this node (state) is a terminal node or depth == 0...
+        if depth == 0 or gameboard.checkForWinner() or gameboard.checkForDraw():
+            # return the heuristic value of node
+            return self.value(gameboard, curr_player)       
         
         # determine opponent's color
         if curr_player == self.player[0]:
