@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import random
-from Board import Board
+from .Board import Board
 
 
 class TestBoard(unittest.TestCase):
