@@ -44,10 +44,10 @@ class Robot():
                 break
 
             # halte aktuellen Farbwert fest
-            colorstatus = color_Sensor.color()
+            colorstatus = self.color_Sensor.color()
 
             # wenn ein Farbwechsel statt findet, dann ...
-            if colorstatus != color_Sensor.color():
+            if colorstatus != self.color_Sensor.color():
                 # ... veringere die aktuelle Position um eins
                 self.currentPosition -= 1
 
@@ -62,10 +62,10 @@ class Robot():
                 break
 
             # halte aktuellen Farbwert fest
-            colorstatus = color_Sensor.color()
+            colorstatus = self.color_Sensor.color()
 
             # wenn ein Farbwechsel statt findet, dann ...
-            if colorstatus != color_Sensor.color():
+            if colorstatus != self.color_Sensor.color():
                 # ... erhöhe die aktuelle Position um eins
                 self.currentPosition += 1
 
@@ -86,14 +86,14 @@ class Robot():
         while not (self.left_touch_Sensor.value() and self.right_touch_Sensor.value()):
  
             # halte aktuellen Farbwert fest
-            colorstatus = color_Sensor.color()
+            colorstatus = self.color_Sensor.color()
 
             # fahre nach links, wenn der linke Knopf gedrückt wird
             if self.left_touch_Sensor.value():
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != color_Sensor.color():
+                if colorstatus != self.color_Sensor.color():
                     # ... veringere die aktuelle Position um eins
                     self.currentPosition -= 1
 
@@ -102,7 +102,7 @@ class Robot():
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != color_Sensor.color():
+                if colorstatus != self.color_Sensor.color():
                     # ... erhöhe die aktuelle Position um eins
                     self.currentPosition += 1
 
@@ -111,14 +111,14 @@ class Robot():
         '''
         while True:
             # halte aktuellen Farbwert fest
-            colorstatus = color_Sensor.color()
+            colorstatus = self.color_Sensor.color()
 
             # fahre nach links, wenn das Ziel links von der aktuellen Position liegt
             if destination < self.currentPosition:
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != color_Sensor.color:
+                if colorstatus != self.color_Sensor.color:
                     # ... veringere die aktuelle Position um eins
                     self.currentPosition -= 1
 
@@ -127,7 +127,7 @@ class Robot():
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != color_Sensor.color:
+                if colorstatus != self.color_Sensor.color:
                     # ... erhöhe die aktuelle Position um eins
                     self.currentPosition += 1
             

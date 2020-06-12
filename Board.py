@@ -21,8 +21,8 @@ class Board:
                     self.board[row][col] = player
                     break
         else:
-            print("%d ist schon voll.", col)
-
+            print("Spalte {} ist schon voll.".format(col))
+ 
     def selectableColumns(self):
         """ give a list of all selectable columns """
         selectableColumns = list(range(7))

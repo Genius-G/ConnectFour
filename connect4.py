@@ -149,6 +149,7 @@ class Connect4:
             if self.player == 1:
                 #col = self.randomMove()
                 col = self.calculateResponses(3)
+                print(col)
             else:
                 # Lese Input aus der Kommandozeile ein
                 col = self.readInputFromConsole()
