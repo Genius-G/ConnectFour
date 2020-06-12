@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-from . import Connect4
-from . import Robot
+from  import Robot
+from .Connect4 import Connect4
 
 class LegoRobot():
 
     def __init__(self):
-        self.robot = Robot.Robot()
-        self.game = Connect4.Connect4()
+        self.robot = Robot()
+        self.game = Connect4()
 
     def humanPlayersTurn(self):
         # hole einen roten Chip
@@ -39,6 +39,23 @@ class LegoRobot():
             Der Lego Roboter ist aktiv bis ein Spiel beendet wurde.
             Darin spielt ein Mensch gegen den Roboter.
         """
+
+        # Game Loop
+        while self.game.finished == False:
+
+            # Der menschliche Spieler ist an der Reihe
+            if self.game.player == 1:
+                self.humanPlayersTurn()
+
+            # Der Roboter ist an der Reihe
+            else:
+                self.robotPlayersTurn()
+                
+            # Nachdem einer der beiden dran war, wird getauscht
+            self.game.passTurn()
+
+        # Wenn gewonnen wurde, dann eine coole Melodie spielen
+        self.robot.playMusic()
 
     
 

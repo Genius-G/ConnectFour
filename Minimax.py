@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import random
-from . import Board
+from Board import Board
 
 class Minimax():
     """ Minimax nimmt einen Zustand eines Vier Gewinnt Spielbretts """

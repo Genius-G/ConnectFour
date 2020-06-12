@@ -4,7 +4,8 @@ import random
 import os
 import numpy as np
 from colorama import Fore, Back, Style
-from . import Board
+from Board import Board
+from Minimax import Minimax
 
 
 class Connect4:
