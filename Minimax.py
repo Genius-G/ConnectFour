@@ -2,6 +2,7 @@
 
 import random
 from Board import Board
+from copy import deepcopy
 
 class Minimax():
     """ Minimax nimmt einen Zustand eines Vier Gewinnt Spielbretts """
@@ -23,8 +24,7 @@ class Minimax():
         legal_moves = {} 
         for col in self.gameboard.selectableColumns():
             # make the move in column 'col' for curr_player
-            temp = Board()
-            temp = self.gameboard
+            temp = deepcopy(self.gameboard)
             temp.enterPiece(curr_player, col)
             # Füge Spielzug an der Stelle col hinzu
             legal_moves[col] = -self.search(depth-1, temp, opp_player)

@@ -39,6 +39,7 @@ class Robot():
         while True:
             # Halte an, wenn die aktuelle Position Null ist
             if self.currentPosition == 0 or self.calibrate_touch_Sensor.value():
+                time.sleep(2)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(3)
                 break

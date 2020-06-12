@@ -25,10 +25,10 @@ class Board:
  
     def selectableColumns(self):
         """ give a list of all selectable columns """
-        selectableColumns = list(range(7))
+        selectableColumns = []
         for col in range(7):
-            if self.board[0][col] != 0 and col in selectableColumns:
-                selectableColumns.remove(col)
+            if self.board[0][col] == 0:
+                selectableColumns.append(col)
         return selectableColumns
 
     # check for number of streaks of length streak: (int)

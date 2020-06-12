@@ -148,14 +148,14 @@ class Connect4:
             # Testing AI
             if self.player == 1:
                 #col = self.randomMove()
-                col = self.calculateResponses(3)
+                col = self.readInputFromConsole()
                 print(col)
             else:
                 # Lese Input aus der Kommandozeile ein
-                col = self.readInputFromConsole()
+                col = self.calculateResponses(5)
 
             # Überprüfe, ob Spielzug möglich ist
-            if col in self.gameboard.selectableColumns():
+            if True:
 
                 # Werfe einen Chip ein
                 self.gameboard.enterPiece(self.player, col)
@@ -181,7 +181,7 @@ class Connect4:
                     break
 
                 # Spielerwechsel
-                self.player *= -1
+                self.passTurn()
 
             else:
                 print("Spalte {} ist schon voll".format(col))
