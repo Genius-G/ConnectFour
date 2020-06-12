@@ -2,8 +2,6 @@
 
 import numpy as np
 
-
-
 class Board:
     """ This class represents a board used in a standart ConnectFour Game """
 

@@ -1,21 +1,21 @@
 import unittest
 import numpy as np
 import random
-from .Board import Board
+from Board import Board
 
 
 class TestBoard(unittest.TestCase):
 
     def testConstructor(self):
         # pre Condition
-        board = Board(6, 7)
+        board = Board()
 
         # test
-        self.assertEqual(board.board.all(), np.zeros((6, 7)).all())
+        self.assertEqual(board.gameboard.all(), np.zeros((6, 7)).all())
 
     def testEnterPiece(self):
         # pre Condition
-        board = Board(6, 7)
+        board = Board()
         player1 = 1
         col = random.randint(0, 6)
 

@@ -1,11 +1,6 @@
 #!/usr/bin/python3
 
-import random
-import numpy as np
-import ev3dev.fonts as fonts
 from ev3dev.auto import *
-
-from . import *
 import time
 
 class Robot():

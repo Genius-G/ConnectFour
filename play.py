@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from  import Robot
-from .Connect4 import Connect4
+from Robot import Robot
+from Connect4 import Connect4
 
 class LegoRobot():
 
