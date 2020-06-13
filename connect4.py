@@ -28,7 +28,8 @@ class Connect4:
     def __init__(self):
         self.gameboard = Board() # Gibt das Spielbrett
         self.player = random.choice([-1, 1])  # legt den Start Spieler fest {-1, 1}
-        self.players = {-1:"Gelb", 1:"Rot"}
+        self.colors = {-1:'Gelb', 1:'Rot'}
+        self.player_color = 'Rot' # Rot beginnt
         self.counter = 0 # Anzahl der Spielzuege
         self.finished = False
 
@@ -102,7 +103,7 @@ class Connect4:
     def showEndOfGame(self):
         # Überprüfe auf Gewinner 
         if self.gameboard.checkForWinner():
-            print("\n–––––– {} hat gewonnen! ––––––\n".format(self.players[self.player]))
+            print("\n–––––– {} hat gewonnen! ––––––\n".format(self.colors[self.player]))
 
         # Überprüfe aus Unentschieden
         elif self.gameboard.checkForDraw():
@@ -114,13 +115,13 @@ class Connect4:
 
     # AI stuff ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
     def randomMove(self):
-        """ returns a random move from possible moves between {1, ..., 7} """
+        """ gebe einen zufällige Zahl zwischen {1, ..., 7} """
         return random.choice(self.gameboard.selectableColumns()) + 1
 
     def calculateResponses(self, difficulty):
-        """ look ahead with minimax
+        """ schau voraus mit dem minimax Algo
             
-            args: [int] difficulty means how many steps the algorithm looks ahead
+            args: [int] difficulty meint wie viele der Algorithmus im Voraus schaut
             
             returns: [int] from {0, ..., 6} 
         """
@@ -129,16 +130,21 @@ class Connect4:
 
     # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––--
     def enterPiece(self, player, col):
-        """ enters the Piece at col for player """
+        """ lässt einen Spielstein fallen in das Spielbrett """
         self.counter += 1
         self.gameboard.enterPiece(player, col)
 
     def passTurn(self):
-        """ passes the turn and changes the current player """
+        """ ändert die Farbe und den aktuellen Spieler der dran ist """
+        # ändere den Spieler von -1 zu 1 und anders rum
         self.player *= -1
+        # ändere die Farbe die dran ist
+        self.player_color = self.colors[self.player]
     
     def main(self):
-        """ This is demonstration on the console """
+        """ Diese Funktion testet den Aufbau und die Implemtierung des Minimax Algorithmus
+            auf der Konsole.
+            """
         print()
         self.showIndicators()
         self.showBoard()

@@ -10,8 +10,15 @@ class LegoRobot():
         self.game = Connect4()
 
     def humanPlayersTurn(self, color):
-        # hole einen roten Chip
-        self.robot.getRedCoin()
+        
+        # überprüfe welche Farbe der menschliche Spieler hat
+        if color == 'Rot':
+            # hole einen roten Chip
+            self.robot.getRedCoin()
+
+        elif color == 'Gelb':
+            # hole einen gelben Chip
+            self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem menschlichen Spieler
         self.robot.manualControl()
@@ -23,8 +30,14 @@ class LegoRobot():
         self.game.enterPiece(self.game.player, self.robot.currentPosition)
 
     def robotPlayersTurn(self, color):
-        # hole einen gelben Chip
-        self.robot.getYellowCoin()
+        # überprüfe welche Farbe der Roboter Spieler hat
+        if color == 'Rot':
+            # hole einen roten Chip
+            self.robot.getRedCoin()
+
+        elif color == 'Gelb':
+            # hole einen gelben Chip
+            self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem meschlichen Spieler
         self.robot.driveToColumn(self.game.calculateResponse())
@@ -39,24 +52,18 @@ class LegoRobot():
             Der Lego Roboter ist aktiv bis ein Spiel beendet wurde.
             Darin spielt ein Mensch gegen den Roboter.
         """
-        # Kalibrierung
-        self.robot.calibrate()
-
-        # Lege Farbe der Spielr fest
-
-        # Lege Farbe vom Roboter fest
-
 
         # Game Loop
         while self.game.finished == False:
 
             # Der menschliche Spieler ist an der Reihe
             if self.game.player == 1:
-                self.humanPlayersTurn('Red')
+                
+                self.humanPlayersTurn(self.game.player_color)
 
             # Der Roboter ist an der Reihe
             else:
-                self.robotPlayersTurn('Yellow')
+                self.robotPlayersTurn(self.game.player_color)
                 
             # Nachdem einer der beiden dran war, wird getauscht
             self.game.passTurn()
