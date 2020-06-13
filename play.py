@@ -44,7 +44,7 @@ class LegoRobot():
             self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem meschlichen Spieler
-        self.robot.driveToColumn(self.game.calculateResponses(5))
+        self.robot.driveToColumn(self.game.calculateResponses(3))
 
         # Zum Schluss wird der Coin eingeschmissen beim Roboter ...
         self.robot.releaseCoin()
@@ -58,7 +58,7 @@ class LegoRobot():
         """
 
         # Kalibrierung
-        self.robot.calibrate()
+        #self.robot.calibrate()
 
         # Game Loop
         while self.game.finished == False:

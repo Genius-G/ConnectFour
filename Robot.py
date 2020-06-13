@@ -21,8 +21,8 @@ class Robot():
 
         # Verbinde EV3 mit Farbsensor
         self.color_Sensor = ColorSensor()
-        # Put the color sensor into COL-COLOR mode.
-        self.color_Sensor.mode = 'COL-COLOR'
+        # Put the color sensor into COL-REFLECT mode.
+        self.color_Sensor.mode = 'COL-REFLECT'
 
         # Nutze die LEDs
         self.leds = Leds()

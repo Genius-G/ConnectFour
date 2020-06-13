@@ -127,7 +127,7 @@ class Connect4:
         """
         mini = Minimax(self.gameboard)
         best_move = mini.bestMove(difficulty, self.player)
-        print(best_move)
+        print("Bets Move: ", best_move)
         return best_move
 
     # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––--
