@@ -126,7 +126,9 @@ class Connect4:
             returns: [int] from {0, ..., 6} 
         """
         mini = Minimax(self.gameboard)
-        return mini.bestMove(difficulty, self.player)
+        best_move = mini.bestMove(difficulty, self.player)
+        print(best_move)
+        return best_move
 
     # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––--
     def enterPiece(self, player, col):

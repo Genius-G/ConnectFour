@@ -32,7 +32,11 @@ class Robot():
         # Lege aktuelle Position ohne Kallibrierung fest
         # Für richtige Kalibrierung verwende calibrate()
         self.currentPosition = self.calibrate()
-    
+
+
+    def print_stats(self):
+        print('Aktuelle Position: ', self.currentPosition)
+
     def getRedCoin(self):
         """ Holt sich einen roten Chip """
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
@@ -51,6 +55,7 @@ class Robot():
             if colorstatus != self.color_Sensor.color:
                 # ... veringere die aktuelle Position um eins
                 self.currentPosition += -1
+                self.print_stats()
 
     def getYellowCoin(self):
         """ Holt sich einen gelben Chip """
@@ -70,6 +75,7 @@ class Robot():
             if colorstatus != self.color_Sensor.color:
                 # ... erhöhe die aktuelle Position um eins
                 self.currentPosition += 1
+                self.print_stats()
 
     def releaseCoin(self):
         """ lässt den Spielstein los """
@@ -99,6 +105,7 @@ class Robot():
                 if colorstatus != self.color_Sensor.color:
                     # ... veringere die aktuelle Position um eins
                     self.currentPosition += -1
+                    self.print_stats()
 
             # fahre nach rechts, wenn der rechte Knopf gedrückt wird      
             elif self.right_touch_Sensor.is_pressed:
@@ -108,6 +115,7 @@ class Robot():
                 if colorstatus != self.color_Sensor.color:
                     # ... erhöhe die aktuelle Position um eins
                     self.currentPosition += 1
+                    self.print_stats()
             
             # Halte den Wagen an, wenn kein Knopf gedrückt wird
             else: 
@@ -130,6 +138,7 @@ class Robot():
                 if colorstatus != self.color_Sensor.color:
                     # ... veringere die aktuelle Position um eins
                     self.currentPosition += -1
+                    self.print_stats()
 
             # fahre nach rechts, wenn das Ziel rechts von der aktuellen Position liegt
             elif destination > self.currentPosition:
@@ -139,6 +148,7 @@ class Robot():
                 if colorstatus != self.color_Sensor.color:
                     # ... erhöhe die aktuelle Position um eins
                     self.currentPosition += 1
+                    self.print_stats()
             
             # wenn angekommen am Ziel
             else:
