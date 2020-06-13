@@ -10,9 +10,9 @@ class Robot():
     """
     # lege globale Variablen fest für die Bewegung des Wagens
     FAST_RIGHT = 1000
-    SLOW_RIGHT = 200
+    SLOW_RIGHT = 400
     FAST_LEFT = -1000
-    SLOW_LEFT = -200
+    SLOW_LEFT = -400
 
     def __init__(self):
         # Verbinde EV3 mit Motoren
@@ -158,7 +158,7 @@ class Robot():
             if self.calibration_touch_Sensor.is_pressed:
                 time.sleep(1)
                 self.move_wagon_Motor.stop(stop_action="hold")
-                self.color_Sensor.calibrate_white()
+                # self.color_Sensor.calibrate_white()
                 break
         # Wenn der Wagen angehalten ist, kalibriere für die aktuelle Position
         self.move_wagon_Motor.stop(stop_action="hold")
