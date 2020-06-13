@@ -155,7 +155,7 @@ class Robot():
         while True: # time.time() <= 20: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
 
             # Halte an, wenn der Berührungssensor aktiviert wird
-            if self.touch_Sensor_1.is_pressed:
+            if self.calibration_touch_Sensor.is_pressed:
                 time.sleep(1)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 self.color_Sensor.calibrate_white()
