@@ -40,7 +40,7 @@ class LegoRobot():
             self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem meschlichen Spieler
-        self.robot.driveToColumn(self.game.calculateResponse())
+        self.robot.driveToColumn(self.game.calculateResponses(5))
 
         # Zum Schluss wird der Coin eingeschmissen beim Roboter ...
         self.robot.releaseCoin()

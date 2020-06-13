@@ -151,7 +151,7 @@ class Robot():
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         # Versuche die ersten 10 Sekunden zu kalibrieren
         # time() liefert Zeit in Mikrosekunden seit Aufruf des Programms
-        while time.time() <= 10: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
+        while time.time() <= 20: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
 
             # Halte an, wenn der Berührungssensor aktiviert wird
             if self.touch_Sensor_1.is_pressed:
