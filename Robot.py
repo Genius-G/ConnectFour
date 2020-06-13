@@ -38,17 +38,17 @@ class Robot():
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         while True:
             # Halte an, wenn die aktuelle Position Null ist
-            if self.currentPosition == 0 or self.calibration_touch_Sensor.is_pressed():
+            if self.currentPosition == 0 or self.calibration_touch_Sensor.is_pressed:
                 time.sleep(1)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(3)
                 break
 
             # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color()
+            colorstatus = self.color_Sensor.color
 
             # wenn ein Farbwechsel statt findet, dann ...
-            if colorstatus != self.color_Sensor.color():
+            if colorstatus != self.color_Sensor.color:
                 # ... veringere die aktuelle Position um eins
                 self.currentPosition -= 1
 
@@ -64,10 +64,10 @@ class Robot():
                 break
 
             # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color()
+            colorstatus = self.color_Sensor.color
 
             # wenn ein Farbwechsel statt findet, dann ...
-            if colorstatus != self.color_Sensor.color():
+            if colorstatus != self.color_Sensor.color:
                 # ... erhöhe die aktuelle Position um eins
                 self.currentPosition += 1
 
@@ -85,26 +85,26 @@ class Robot():
         '''
 
         # führe die Schleife aus bis beide Knöpfe gleichzeitig gedrückt werden
-        while not (self.left_touch_Sensor.value() and self.right_touch_Sensor.value()):
+        while not (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
  
             # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color()
+            colorstatus = self.color_Sensor.color
 
             # fahre nach links, wenn der linke Knopf gedrückt wird
-            if self.left_touch_Sensor.value():
+            if self.left_touch_Sensor.is_pressed:
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != self.color_Sensor.color():
+                if colorstatus != self.color_Sensor.color:
                     # ... veringere die aktuelle Position um eins
                     self.currentPosition -= 1
 
             # fahre nach rechts, wenn der rechte Knopf gedrückt wird      
-            elif self.right_touch_Sensor.value():
+            elif self.right_touch_Sensor.is_pressed:
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != self.color_Sensor.color():
+                if colorstatus != self.color_Sensor.color:
                     # ... erhöhe die aktuelle Position um eins
                     self.currentPosition += 1
             
@@ -119,7 +119,7 @@ class Robot():
         '''
         while True:
             # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color()
+            colorstatus = self.color_Sensor.color
 
             # fahre nach links, wenn das Ziel links von der aktuellen Position liegt
             if destination < self.currentPosition:
@@ -154,7 +154,7 @@ class Robot():
         while time.time() <= 10: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
 
             # Halte an, wenn der Berührungssensor aktiviert wird
-            if self.touch_Sensor_1.is_pressed():
+            if self.touch_Sensor_1.is_pressed:
                 time.sleep(1)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 self.color_Sensor.calibrate_white()
