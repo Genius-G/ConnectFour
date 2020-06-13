@@ -42,16 +42,21 @@ class LegoRobot():
         # Kalibrierung
         self.robot.calibrate()
 
+        # Lege Farbe der Spielr fest
+
+        # Lege Farbe vom Roboter fest
+
+
         # Game Loop
         while self.game.finished == False:
 
             # Der menschliche Spieler ist an der Reihe
             if self.game.player == 1:
-                self.humanPlayersTurn()
+                self.humanPlayersTurn('Red')
 
             # Der Roboter ist an der Reihe
             else:
-                self.robotPlayersTurn()
+                self.robotPlayersTurn('Yellow')
                 
             # Nachdem einer der beiden dran war, wird getauscht
             self.game.passTurn()

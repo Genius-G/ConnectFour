@@ -9,10 +9,10 @@ class Robot():
 
     """
     # lege globale Variablen fest für die Bewegung des Wagens
-    FAST_RIGHT = -1000
-    SLOW_RIGHT = -200
-    FAST_LEFT = 1000
-    SLOW_LEFT = 200
+    FAST_RIGHT = 1000
+    SLOW_RIGHT = 200
+    FAST_LEFT = -1000
+    SLOW_LEFT = -200
 
     def __init__(self):
         # Verbinde EV3 mit Motoren
@@ -151,15 +151,16 @@ class Robot():
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         # Versuche die ersten 10 Sekunden zu kalibrieren
         # time() liefert Zeit in Mikrosekunden seit Aufruf des Programms
-        while time.time() * 1000 <= 10000: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
+        while time.time() <= 10: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
 
             # Halte an, wenn der Berührungssensor aktiviert wird
-            if self.touch_Sensor_1.value():
-                self.move_wagon_Motor.stop(stop_action="hold")
+            if self.touch_Sensor_1.is_pressed():
                 time.sleep(1)
+                self.move_wagon_Motor.stop(stop_action="hold")
                 self.color_Sensor.calibrate_white()
                 break
         # Wenn der Wagen angehalten ist, kalibriere für die aktuelle Position
+        self.move_wagon_Motor.stop(stop_action="hold")
         self.currentPosition = 0
     
     def playMusic(self):
