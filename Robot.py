@@ -97,7 +97,7 @@ class Robot():
                 # wenn ein Farbwechsel statt findet, dann ...
                 if colorstatus != self.color_Sensor.color:
                     # ... veringere die aktuelle Position um eins
-                    self.currentPosition -= 1
+                    self.currentPosition += -1
 
             # fahre nach rechts, wenn der rechte Knopf gedrückt wird      
             elif self.right_touch_Sensor.is_pressed:
@@ -128,7 +128,7 @@ class Robot():
                 # wenn ein Farbwechsel statt findet, dann ...
                 if colorstatus != self.color_Sensor.color:
                     # ... veringere die aktuelle Position um eins
-                    self.currentPosition -= 1
+                    self.currentPosition += -1
 
             # fahre nach rechts, wenn das Ziel rechts von der aktuellen Position liegt
             elif destination > self.currentPosition:
