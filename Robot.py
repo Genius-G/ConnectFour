@@ -177,11 +177,11 @@ class Robot():
         self.move_wagon_Motor.stop(stop_action="hold")
         self.currentPosition = 0
 
-    def setRedColor(self, color):
+    def setRedColor(self):
         self.leds.set_color("LEFT", "RED")
         self.leds.set_color("RIGHT", "RED")
 
-    def setYellowColor(self, color):
+    def setYellowColor(self):
         self.leds.set_color("LEFT", "YELLOW")
         self.leds.set_color("RIGHT", "YELLOW")
     
