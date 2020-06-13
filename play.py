@@ -58,7 +58,7 @@ class LegoRobot():
         """
 
         # Kalibrierung
-        #self.robot.calibrate()
+        self.robot.calibrate()
 
         # Game Loop
         while self.game.finished == False:
