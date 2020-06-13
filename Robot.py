@@ -27,7 +27,7 @@ class Robot():
         # Verbinde EV3 mit Tastsensoren
         self.left_touch_Sensor = TouchSensor('in1')
         self.right_touch_Sensor = TouchSensor('in2')
-        self.calibrate_touch_Sensor = TouchSensor('in3')
+        self.calibration_touch_Sensor = TouchSensor('in3')
 
         # Lege aktuelle Position ohne Kallibrierung fest
         # Für richtige Kalibrierung verwende calibrate()
@@ -38,7 +38,7 @@ class Robot():
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         while True:
             # Halte an, wenn die aktuelle Position Null ist
-            if self.currentPosition == 0 or self.calibrate_touch_Sensor.value():
+            if self.currentPosition == 0 or self.calibration_touch_Sensor.is_pressed():
                 time.sleep(1)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(3)
