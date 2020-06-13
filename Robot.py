@@ -73,10 +73,11 @@ class Robot():
 
     def releaseCoin(self):
         """ lässt den Spielstein los """
+        self.move_wagon_Motor.stop(stop_action="hold")
         self.chip_release_Motor.run_timed(time_sp=500, speed_sp=-550)
         time.sleep(1)
         self.chip_release_Motor.run_timed(time_sp=500, speed_sp=550)
-        time.sleep(1)
+        time.sleep(2)
 
     def manualControl(self):
         ''' lässt den Wagen links fahren, wenn linker Knopf gedrückt und
@@ -151,7 +152,7 @@ class Robot():
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         # Versuche die ersten 10 Sekunden zu kalibrieren
         # time() liefert Zeit in Mikrosekunden seit Aufruf des Programms
-        while time.time() <= 20: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
+        while True: # time.time() <= 20: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
 
             # Halte an, wenn der Berührungssensor aktiviert wird
             if self.touch_Sensor_1.is_pressed:

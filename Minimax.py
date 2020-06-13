@@ -62,7 +62,7 @@ class Minimax():
         
     def search(self, depth, gameboard, curr_player):
         """ 
-            gibt den alpha wert zurück
+            gibt den alpha wert zurück.
             Args:
                 depth:[int] gibt die Tiefe der Suche an
                 gameboard:[Board] gibt ein Spielbrett an

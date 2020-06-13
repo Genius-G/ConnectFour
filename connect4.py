@@ -27,7 +27,7 @@ class Connect4:
     # Constructor
     def __init__(self):
         self.gameboard = Board() # Gibt das Spielbrett
-        self.player = random.choice([-1, 1])  # legt den Start Spieler fest {-1, 1}
+        self.player = 1 # random.choice([-1, 1])  # legt den Start Spieler fest {-1, 1}
         self.colors = {-1:'Gelb', 1:'Rot'}
         self.player_color = 'Rot' # Rot beginnt
         self.counter = 0 # Anzahl der Spielzuege
