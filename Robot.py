@@ -24,6 +24,9 @@ class Robot():
         # Put the color sensor into COL-COLOR mode.
         self.color_Sensor.mode = 'COL-COLOR'
 
+        # Nutze die LEDs
+        self.leds = Leds()
+
         # Verbinde EV3 mit Tastsensoren
         self.left_touch_Sensor = TouchSensor('in1')
         self.right_touch_Sensor = TouchSensor('in2')
@@ -173,6 +176,14 @@ class Robot():
         # Wenn der Wagen angehalten ist, kalibriere für die aktuelle Position
         self.move_wagon_Motor.stop(stop_action="hold")
         self.currentPosition = 0
+
+    def setRedColor(self, color):
+        self.leds.set_color("LEFT", "RED")
+        self.leds.set_color("RIGHT", "RED")
+
+    def setYellowColor(self, color):
+        self.leds.set_color("LEFT", "YELLOW")
+        self.leds.set_color("RIGHT", "YELLOW")
     
     def playMusic(self):
         # TODO Coole Musik abspielen

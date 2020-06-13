@@ -20,8 +20,13 @@ class Board:
                 if self.board[row][col] == 0:
                     self.board[row][col] = player
                     break
-        else:
+        
+        elif col in range(7):
             print("Spalte {} ist schon voll.".format(col))
+
+        else:
+            print("Spalte {} muss in {0, ..., 6} liegen.".format(col))
+            
  
     def selectableColumns(self):
         """ give a list of all selectable columns """

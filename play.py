@@ -14,10 +14,12 @@ class LegoRobot():
         # überprüfe welche Farbe der menschliche Spieler hat
         if color == 'Rot':
             # hole einen roten Chip
+            self.robot.setRedColor()
             self.robot.getRedCoin()
 
         elif color == 'Gelb':
-            # hole einen gelben Chip
+            # hole einen gelben Chips
+            self.robot.setYellowColor()
             self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem menschlichen Spieler
@@ -33,10 +35,12 @@ class LegoRobot():
         # überprüfe welche Farbe der Roboter Spieler hat
         if color == 'Rot':
             # hole einen roten Chip
+            self.robot.setRedColor()
             self.robot.getRedCoin()
 
         elif color == 'Gelb':
             # hole einen gelben Chip
+            self.robot.setYellowColor()
             self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem meschlichen Spieler
