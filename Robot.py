@@ -50,7 +50,7 @@ class Robot():
             # wenn ein Farbwechsel statt findet, dann ...
             if colorstatus != self.color_Sensor.color:
                 # ... veringere die aktuelle Position um eins
-                self.currentPosition -= 1
+                self.currentPosition += -1
 
     def getYellowCoin(self):
         """ Holt sich einen gelben Chip """

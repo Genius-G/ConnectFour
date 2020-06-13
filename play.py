@@ -53,6 +53,9 @@ class LegoRobot():
             Darin spielt ein Mensch gegen den Roboter.
         """
 
+        # Kalibrierung
+        self.robot.calibrate()
+
         # Game Loop
         while self.game.finished == False:
 
