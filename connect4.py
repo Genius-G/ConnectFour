@@ -118,7 +118,12 @@ class Connect4:
         return random.choice(self.gameboard.selectableColumns()) + 1
 
     def calculateResponses(self, difficulty):
-        """ look ahead with minimax """
+        """ look ahead with minimax
+            
+            args: [int] difficulty means how many steps the algorithm looks ahead
+            
+            returns: [int] from {0, ..., 6} 
+        """
         mini = Minimax(self.gameboard)
         return mini.bestMove(difficulty, self.player)
 
@@ -147,12 +152,11 @@ class Connect4:
             col = -1
             # Testing AI
             if self.player == 1:
-                #col = self.randomMove()
                 col = self.readInputFromConsole()
                 print(col)
             else:
                 # Lese Input aus der Kommandozeile ein
-                col = self.calculateResponses(5)
+                col = self.calculateResponses(10)
 
             # Überprüfe, ob Spielzug möglich ist
             if True:

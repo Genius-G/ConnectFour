@@ -31,7 +31,7 @@ class Robot():
 
         # Lege aktuelle Position ohne Kallibrierung fest
         # Für richtige Kalibrierung verwende calibrate()
-        self.currentPosition = 0
+        self.currentPosition = self.calibrate()
     
     def getRedCoin(self):
         """ Holt sich einen roten Chip """
@@ -39,7 +39,7 @@ class Robot():
         while True:
             # Halte an, wenn die aktuelle Position Null ist
             if self.currentPosition == 0 or self.calibrate_touch_Sensor.value():
-                time.sleep(2)
+                time.sleep(1)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(3)
                 break
@@ -58,6 +58,7 @@ class Robot():
         while True:
             # Halte an, wenn der die aktuelle Position Null ist
             if self.currentPosition == 8: # TODO TESTE OB DAS MIT 8 STIMMT
+                time.sleep(1)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(3)
                 break
@@ -106,9 +107,15 @@ class Robot():
                 if colorstatus != self.color_Sensor.color():
                     # ... erhöhe die aktuelle Position um eins
                     self.currentPosition += 1
+            
+            # Halte den Wagen an, wenn kein Knopf gedrückt wird
+            else: 
+                self.move_wagon_Motor.stop(stop_action="hold")
 
     def driveToColumn(self, destination):
         ''' fährt bis zur vorgegebenen Zielspalte und bleibt dann stehen.
+
+        Args: destination [int] gibt die Zielspalte an
         '''
         while True:
             # halte aktuellen Farbwert fest

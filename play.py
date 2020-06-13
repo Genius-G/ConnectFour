@@ -9,7 +9,7 @@ class LegoRobot():
         self.robot = Robot()
         self.game = Connect4()
 
-    def humanPlayersTurn(self):
+    def humanPlayersTurn(self, color):
         # hole einen roten Chip
         self.robot.getRedCoin()
 
@@ -22,12 +22,12 @@ class LegoRobot():
         # ... und beim Game
         self.game.enterPiece(self.game.player, self.robot.currentPosition)
 
-    def robotPlayersTurn(self):
+    def robotPlayersTurn(self, color):
         # hole einen gelben Chip
         self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem meschlichen Spieler
-        self.robot.driveToColumn(self.game.randomMove())
+        self.robot.driveToColumn(self.game.calculateResponse())
 
         # Zum Schluss wird der Coin eingeschmissen beim Roboter ...
         self.robot.releaseCoin()
