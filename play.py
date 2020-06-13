@@ -29,7 +29,7 @@ class LegoRobot():
         # Zum Schluss wird der Coin eingeschmissen beim Roboter ...
         self.robot.releaseCoin()
         # ... und beim Game
-        self.game.enterPiece(self.game.player, self.robot.currentPosition)
+        self.game.enterPiece(self.game.player, self.robot.currentPosition - 1)
 
     def robotPlayersTurn(self, color):
         # überprüfe welche Farbe der Roboter Spieler hat
