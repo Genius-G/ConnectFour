@@ -14,6 +14,9 @@ class Robot():
     FAST_LEFT = -1000
     SLOW_LEFT = -300
 
+    # verzögere bis der Wagen anhält
+    TIME_OFFSET = 0.25
+
     def __init__(self):
         # Verbinde EV3 mit Motoren
         self.move_wagon_Motor = LargeMotor('outA')
@@ -58,6 +61,7 @@ class Robot():
                 
                 # Kalibriere den Wert fur die Grenze 
                 # TODO TESTE OB DEINE IDEE KLAPPT MIT DEM TEILEN DURCH 2
+                print(self.color_Sensor.reflected_light_intensity)
                 self.boundry = self.color_Sensor.reflected_light_intensity / 2
                 
                 break
@@ -66,14 +70,15 @@ class Robot():
         self.currentPosition = 0
 
     def detectColorChange(self):
-        """ bemerkt einen Farbwechsel von Rot zu Weiß
-            gibt WAHR zurück, wenn der Farbsensor Rot sieht    
+        """ bemerkt einen Farbwechsel von Hell und Dunkel
+            gibt WAHR zurück, wenn ein Farbwechsel statt findet  
         """
 
         # definiere Hilfsfunktion, um zu sagen, ob das aktuelle Feld ein helles Feld ist.
         def _detectBrightColor():
+            ''' gibt wahr zurück, wenn der Farbsensor hell sieht ''' 
 
-            # überprüfe ob aktuelle Farbe hell ist, oder nicht
+            # überprüfe ob aktuelle Farbe heller als der kalibrierte Grenzwert
             if self.color_Sensor.reflected_light_intensity > self.boundry:
                 
                 # Gebe Wahr zurück, wenn das aktuelle Feld hell ist
@@ -109,10 +114,8 @@ class Robot():
                 time.sleep(1)
                 break
 
-            
-
             # wenn ein Farbwechsel statt findet, dann ...
-            if self.detectColorChange:
+            if self.detectColorChange():
                 # ... veringere die aktuelle Position um eins, da er nach links fährt
                 self.currentPosition += -1
                 self.print_stats()
@@ -123,7 +126,7 @@ class Robot():
         while True:
             # Halte an, wenn der die aktuelle Position Null ist
             if self.currentPosition == 8: # TODO TESTE OB DAS MIT 8 STIMMT
-                time.sleep(.1)
+                time.sleep(self.TIME_OFFSET)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 time.sleep(1)
                 break
@@ -211,7 +214,8 @@ class Robot():
             # wenn angekommen am Ziel
             else:
                 
-                # halte den Wagen an
+                # halte den Wagen nach kurzen Verzögerung an
+                time.sleep(self.TIME_OFFSET)
                 self.move_wagon_Motor.stop(stop_action="hold")
                 # TODO TESTE OB ÜBER DEM RICHTIGEN SCHACHT
                 break 
