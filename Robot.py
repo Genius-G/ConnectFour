@@ -10,9 +10,9 @@ class Robot():
     """
     # lege globale Variablen fest für die Bewegung des Wagens
     FAST_RIGHT = 1000
-    SLOW_RIGHT = 400
+    SLOW_RIGHT = 300
     FAST_LEFT = -1000
-    SLOW_LEFT = -400
+    SLOW_LEFT = -300
 
     def __init__(self):
         # Verbinde EV3 mit Motoren
@@ -22,7 +22,7 @@ class Robot():
         # Verbinde EV3 mit Farbsensor
         self.color_Sensor = ColorSensor()
         # Put the color sensor into COL-REFLECT mode.
-        self.color_Sensor.mode = 'COL-REFLECT'
+        self.color_Sensor.mode = 'REF-RAW'
 
         # Nutze die LEDs
         self.leds = Leds()
@@ -32,31 +32,88 @@ class Robot():
         self.right_touch_Sensor = TouchSensor('in2')
         self.calibration_touch_Sensor = TouchSensor('in3')
 
-        # Lege aktuelle Position ohne Kallibrierung fest
         # Für richtige Kalibrierung verwende calibrate()
         self.currentPosition = self.calibrate()
+        self.boundry = 500
 
 
     def print_stats(self):
         print('Aktuelle Position: ', self.currentPosition)
 
+    def calibrate(self):
+        """ fahre so lange in die Richtung des roten Spenders bis ein Berührungsensor auslöst
+            oder nach 10 Sekunden, 
+            dann kalibriert er für die Farba Weiß und legt die aktuelle Position auf 0.
+        """
+        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
+        
+        # Kalibriere bis der Kalibrationssensor berührt wurde
+        while True:
+
+            # Halte an, wenn der Berührungssensor aktiviert wird
+            if self.calibration_touch_Sensor.is_pressed:
+
+                time.sleep(.5)
+                self.move_wagon_Motor.stop(stop_action="hold")
+                
+                # Kalibriere den Wert fur die Grenze 
+                # TODO TESTE OB DEINE IDEE KLAPPT MIT DEM TEILEN DURCH 2
+                self.boundry = self.color_Sensor.reflected_light_intensity / 2
+                
+                break
+        # Wenn der Wagen angehalten ist, kalibriere für die aktuelle Position
+        self.move_wagon_Motor.stop(stop_action="hold")
+        self.currentPosition = 0
+
+    def detectColorChange(self):
+        """ bemerkt einen Farbwechsel von Rot zu Weiß
+            gibt WAHR zurück, wenn der Farbsensor Rot sieht    
+        """
+
+        # definiere Hilfsfunktion, um zu sagen, ob das aktuelle Feld ein helles Feld ist.
+        def _detectBrightColor():
+
+            # überprüfe ob aktuelle Farbe hell ist, oder nicht
+            if self.color_Sensor.reflected_light_intensity > self.boundry:
+                
+                # Gebe Wahr zurück, wenn das aktuelle Feld hell ist
+                return True
+
+            else:
+                return False
+
+        # lege 2 Mal die aktuelle Farbe fest
+        color_one = _detectBrightColor()
+        color_two = _detectBrightColor()
+        print("Die Helligkeit ist aktuell ", color_one, " und ", color_two)
+
+        # überprüfe ob ein Unterschied zwischen den 2 Werten vor liegt
+        if color_one != color_two:
+            
+            # gebe Wahr zurürck, da ein Farbwechsel statt gefunden hat
+            return True
+
+        else: 
+            # gebe Falsch zurück, da die Farben gleich sind
+            return False
+
+
     def getRedCoin(self):
         """ Holt sich einen roten Chip """
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         while True:
-            # Halte an, wenn die aktuelle Position Null ist
+            # Halte an, wenn die aktuelle Position Null ist oder der Kalibrationssensor berührt wurde
             if self.currentPosition == 0 or self.calibration_touch_Sensor.is_pressed:
-                time.sleep(1)
+                time.sleep(.1)
                 self.move_wagon_Motor.stop(stop_action="hold")
-                time.sleep(3)
+                time.sleep(1)
                 break
 
-            # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color
+            
 
             # wenn ein Farbwechsel statt findet, dann ...
-            if colorstatus != self.color_Sensor.color:
-                # ... veringere die aktuelle Position um eins
+            if self.detectColorChange:
+                # ... veringere die aktuelle Position um eins, da er nach links fährt
                 self.currentPosition += -1
                 self.print_stats()
 
@@ -66,27 +123,28 @@ class Robot():
         while True:
             # Halte an, wenn der die aktuelle Position Null ist
             if self.currentPosition == 8: # TODO TESTE OB DAS MIT 8 STIMMT
-                time.sleep(1)
+                time.sleep(.1)
                 self.move_wagon_Motor.stop(stop_action="hold")
-                time.sleep(3)
+                time.sleep(1)
                 break
 
-            # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color
-
             # wenn ein Farbwechsel statt findet, dann ...
-            if colorstatus != self.color_Sensor.color:
-                # ... erhöhe die aktuelle Position um eins
+            if self.detectColorChange():
+                # ... erhöhe die aktuelle Position um eins, da er nach rechts fährt
                 self.currentPosition += 1
                 self.print_stats()
 
     def releaseCoin(self):
         """ lässt den Spielstein los """
+
+        # Halte zunächst den Wagen an
         self.move_wagon_Motor.stop(stop_action="hold")
+
+        # Öffne den Schacht für 1 Sekunde
         self.chip_release_Motor.run_timed(time_sp=500, speed_sp=-550)
         time.sleep(1)
         self.chip_release_Motor.run_timed(time_sp=500, speed_sp=550)
-        time.sleep(2)
+        time.sleep(1)
 
     def manualControl(self):
         ''' lässt den Wagen links fahren, wenn linker Knopf gedrückt und
@@ -96,17 +154,14 @@ class Robot():
 
         # führe die Schleife aus bis beide Knöpfe gleichzeitig gedrückt werden
         while not (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
- 
-            # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color
 
             # fahre nach links, wenn der linke Knopf gedrückt wird
             if self.left_touch_Sensor.is_pressed:
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != self.color_Sensor.color:
-                    # ... veringere die aktuelle Position um eins
+                if self.detectColorChange():
+                    # ... veringere die aktuelle Position um eins, da der Wagen nach links fährt
                     self.currentPosition += -1
                     self.print_stats()
 
@@ -115,8 +170,8 @@ class Robot():
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != self.color_Sensor.color:
-                    # ... erhöhe die aktuelle Position um eins
+                if self.detectColorChange():
+                    # ... erhöhe die aktuelle Position um eins, da der Wagen nach rechts fährt
                     self.currentPosition += 1
                     self.print_stats()
             
@@ -127,19 +182,19 @@ class Robot():
     def driveToColumn(self, destination):
         ''' fährt bis zur vorgegebenen Zielspalte und bleibt dann stehen.
 
-        Args: destination [int] gibt die Zielspalte an
+        Args: destination [int] gibt die Zielspalte an und liegt im Bereich {0, ..., 8}
         '''
+
+        # Überprüfe so lange bis man am Ziel ist
         while True:
-            # halte aktuellen Farbwert fest
-            colorstatus = self.color_Sensor.color
 
             # fahre nach links, wenn das Ziel links von der aktuellen Position liegt
             if destination < self.currentPosition:
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != self.color_Sensor.color:
-                    # ... veringere die aktuelle Position um eins
+                if self.detectColorChange():
+                    # ... veringere die aktuelle Position um eins, da der Wagen nach links fährt
                     self.currentPosition += -1
                     self.print_stats()
 
@@ -148,34 +203,19 @@ class Robot():
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
 
                 # wenn ein Farbwechsel statt findet, dann ...
-                if colorstatus != self.color_Sensor.color:
-                    # ... erhöhe die aktuelle Position um eins
+                if self.detectColorChange():
+                    # ... erhöhe die aktuelle Position um eins, da der Wagen nach rechts fährt
                     self.currentPosition += 1
                     self.print_stats()
             
             # wenn angekommen am Ziel
             else:
-                break # TODO TESTE OB ÜBER DEM RICHTIGEN SCHACHT
-
-    def calibrate(self):
-        """ fahre so lange in die Richtung des roten Spenders bis ein Berührungsensor auslöst
-            oder nach 10 Sekunden, 
-            dann kalibriert er für die Farba Weiß und legt die aktuelle Position auf 0.
-        """
-        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
-        # Versuche die ersten 10 Sekunden zu kalibrieren
-        # time() liefert Zeit in Mikrosekunden seit Aufruf des Programms
-        while True: # time.time() <= 20: # TODO ÜBERPRÜFE OB 10 SEKUNDEN REICHEN
-
-            # Halte an, wenn der Berührungssensor aktiviert wird
-            if self.calibration_touch_Sensor.is_pressed:
-                time.sleep(1)
+                
+                # halte den Wagen an
                 self.move_wagon_Motor.stop(stop_action="hold")
-                # self.color_Sensor.calibrate_white()
-                break
-        # Wenn der Wagen angehalten ist, kalibriere für die aktuelle Position
-        self.move_wagon_Motor.stop(stop_action="hold")
-        self.currentPosition = 0
+                # TODO TESTE OB ÜBER DEM RICHTIGEN SCHACHT
+                break 
+
 
     def setRedColor(self):
         self.leds.set_color("LEFT", "RED")

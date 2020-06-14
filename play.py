@@ -14,12 +14,12 @@ class LegoRobot():
         # überprüfe welche Farbe der menschliche Spieler hat
         if color == 'Rot':
             # hole einen roten Chip
-            #self.robot.setRedColor()
+            # self.robot.setRedColor()
             self.robot.getRedCoin()
 
         elif color == 'Gelb':
             # hole einen gelben Chips
-            #self.robot.setYellowColor()
+            # self.robot.setYellowColor()
             self.robot.getYellowCoin()
 
         # Übergebe die Kontrolle dem menschlichen Spieler
@@ -71,6 +71,9 @@ class LegoRobot():
             # Der Roboter ist an der Reihe
             else:
                 self.robotPlayersTurn(self.game.player_color)
+
+            # Gebe zum Debuggen ein virtuelles Feld auf der Konsole aus
+            self.game.showBoard()
                 
             # Nachdem einer der beiden dran war, wird getauscht
             self.game.passTurn()
