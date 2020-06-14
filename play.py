@@ -10,7 +10,7 @@ class LegoRobot():
         self.game = Connect4()
 
     def humanPlayersTurn(self, color):
-        
+
         # überprüfe welche Farbe der menschliche Spieler hat
         if color == 'Rot':
             # hole einen roten Chip
@@ -58,14 +58,14 @@ class LegoRobot():
         """
 
         # Kalibrierung
-        self.robot.calibrate()
+        #self.robot.calibrate()
 
         # Game Loop
         while self.game.finished == False:
 
             # Der menschliche Spieler ist an der Reihe
             if self.game.player == 1:
-                
+
                 self.humanPlayersTurn(self.game.player_color)
 
             # Der Roboter ist an der Reihe
@@ -74,14 +74,14 @@ class LegoRobot():
 
             # Gebe zum Debuggen ein virtuelles Feld auf der Konsole aus
             self.game.showBoard()
-                
+
             # Nachdem einer der beiden dran war, wird getauscht
             self.game.passTurn()
 
         # Wenn gewonnen wurde, dann eine coole Melodie spielen
         self.robot.playMusic()
 
-    
+
 
 if __name__ == "__main__": # Default "main method" idiom.
     LegoRobot = LegoRobot()

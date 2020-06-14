@@ -1,31 +1,22 @@
 #!/usr/bin/python3
 
 from ev3dev.auto import *
+from ColorHandler import ColorHandler
 import time
 
 class Robot():
-    """ Diese Klasse beschreibt die Möglichkeiten des Roboters.
-        Er kann einen Wagen bewegen und dieser einen Chip loslassen.
 
-    """
-    # lege globale Variablen fest für die Bewegung des Wagens
     FAST_RIGHT = 1000
     SLOW_RIGHT = 300
+    VSLOW_RIGHT = 100
     FAST_LEFT = -1000
     SLOW_LEFT = -300
-
-    # verzögere bis der Wagen anhält
-    TIME_OFFSET = 0.25
+    VSLOW_LEFT = -100
 
     def __init__(self):
-        # Verbinde EV3 mit Motoren
+          # Verbinde EV3 mit Motoren
         self.move_wagon_Motor = LargeMotor('outA')
         self.chip_release_Motor = Motor('outB')
-
-        # Verbinde EV3 mit Farbsensor
-        self.color_Sensor = ColorSensor()
-        # Put the color sensor into COL-REFLECT mode.
-        self.color_Sensor.mode = 'REF-RAW'
 
         # Nutze die LEDs
         self.leds = Leds()
@@ -35,112 +26,166 @@ class Robot():
         self.right_touch_Sensor = TouchSensor('in2')
         self.calibration_touch_Sensor = TouchSensor('in3')
 
+        # Verbinde EV3 mit Farbsensor
+        self.ColorHandler = ColorHandler()
+
+        # Lege einen Start-Wert für self.currentPosition fest
+        self.currentPosition = 100
+
+        # Legen einen Start-Wert für self.lastMovement fest
+        self.lastMovement = 'Right'
+
+        # Lege einen Start-Wert für self.colorstatus fest
+        self.colorstatus = self.ColorHandler.currentColor()
+
+        ''' Calibrate wird geändert '''
+        # Lege aktuelle Position ohne Kallibrierung fest
         # Für richtige Kalibrierung verwende calibrate()
-        self.currentPosition = self.calibrate()
-        self.boundry = 500
+        #self.calibrate()
 
 
-    def print_stats(self):
-        print('Aktuelle Position: ', self.currentPosition)
+    def print_stats(self, row):
+        print(row, self.colorstatus,
+            self.ColorHandler.color_Sensor.reflected_light_intensity,
+            self.ColorHandler.currentColor(), self.ColorHandler.boundary,
+            self.currentPosition)
 
-    def calibrate(self):
-        """ fahre so lange in die Richtung des roten Spenders bis ein Berührungsensor auslöst
-            oder nach 10 Sekunden, 
-            dann kalibriert er für die Farba Weiß und legt die aktuelle Position auf 0.
-        """
-        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
-        
-        # Kalibriere bis der Kalibrationssensor berührt wurde
+
+
+    def manualControl(self):
+        ''' lässt den Wagen links fahren, wenn linker Knopf gedrückt und
+            lässt den Wagen rechts fahren, wenn rechter Knopf gedrückt und
+            bleibt stehen, wenn beide gleichzeitig gedrückt werden.
+        '''
+
+        # führe die Schleife aus bis beide Knöpfe gleichzeitig gedrückt werden
         while True:
+            # halte aktuellen Farbwert fest
+            self.colorstatus = self.ColorHandler.currentColor()
 
-            # Halte an, wenn der Berührungssensor aktiviert wird
-            if self.calibration_touch_Sensor.is_pressed:
+            if self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed:
 
                 time.sleep(.5)
-                self.move_wagon_Motor.stop(stop_action="hold")
-                
-                # Kalibriere den Wert fur die Grenze 
-                # TODO TESTE OB DEINE IDEE KLAPPT MIT DEM TEILEN DURCH 2
-                print(self.color_Sensor.reflected_light_intensity)
-                self.boundry = self.color_Sensor.reflected_light_intensity / 2
-                
-                break
-        # Wenn der Wagen angehalten ist, kalibriere für die aktuelle Position
-        self.move_wagon_Motor.stop(stop_action="hold")
-        self.currentPosition = 0
+                if (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
+                    break
 
-    def detectColorChange(self):
-        """ bemerkt einen Farbwechsel von Hell und Dunkel
-            gibt WAHR zurück, wenn ein Farbwechsel statt findet  
-        """
+            # fahre nach links, wenn der linke Knopf gedrückt wird und sich
+            # der Wagen nicht am Linken Rand befindet
+            elif self.left_touch_Sensor.is_pressed and self.currentPosition != 0:
+                '''das bedeutet nächstes Feld Schwarz -> Weiß'''
+                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
 
-        # definiere Hilfsfunktion, um zu sagen, ob das aktuelle Feld ein helles Feld ist.
-        def _detectBrightColor():
-            ''' gibt wahr zurück, wenn der Farbsensor hell sieht ''' 
+                # Falls sich der Wagen am Rand des Spielbretts befindet ...
+                if self.currentPosition == 1 or self.currentPosition == 8:
+                    if self.ColorHandler.BlackToWhite():
+                        # Falls Übergang vermindere die Positionszahl
+                        self.currentPosition -= 1
+                        print('-1')
+                        self.print_stats(85)
 
-            # überprüfe ob aktuelle Farbe heller als der kalibrierte Grenzwert
-            if self.color_Sensor.reflected_light_intensity > self.boundry:
-                
-                # Gebe Wahr zurück, wenn das aktuelle Feld hell ist
-                return True
+                # ... ansonsten ...
+                elif self.ColorHandler.WhiteToBlack():
+                    ''' Das wird durch WTB und BTW nicht mehr benötigt
+                    # Teste, ob es sich dabei um eine Dopplung handelt ...
+                    if self.lastMovement == 'Right':
+                        # Falls ja, vermindere die Positionszahl NICHT und
+                        # update die Richtungsvariable self.lastMovement
+                        self.lastMovement = 'Left'
+                        print('←←←Richtungswechsel←←←')
+                        self.print_stats(80)
+                    else:'''
+                    # Falls Übergang vermindere die Positionszahl
+                    self.currentPosition -= 1
+                    print('-1')
+                    self.print_stats(85)
 
+            # fahre nach rechts, wenn der rechte Knopf gedrückt wird
+            elif self.right_touch_Sensor.is_pressed and self.currentPosition != 8:
+                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
+
+                if self.currentPosition == 7 or self.currentPosition == 0:
+                    if self.ColorHandler.WhiteToBlack():
+                        # Falls Übergang vermindere die Positionszahl
+                        self.currentPosition += 1
+                        print('+1')
+
+                # Falls ein Feldwechsel stattfindet ...
+                elif self.ColorHandler.BlackToWhite():
+                    '''
+                    # Teste, ob es sich dabei um eine Dopplung handelt ...
+                    if self.lastMovement == 'Left':
+                        # Falls ja, erhöhe die Positionszahl NICHT und
+                        # update die Richtungsvariable self.lastMovement
+                        self.lastMovement = 'Right'
+                        print('→→→Richtungswechsel→→→')
+                        self.print_stats(99)
+                    else:'''
+                    # Falls nein, erhöhe die Positionszahl
+                    self.currentPosition += 1
+                    print('+1')
+                    self.print_stats(104)
+
+            # Halte den Wagen an, wenn kein Knopf gedrückt wird
             else:
-                return False
-
-        # lege 2 Mal die aktuelle Farbe fest
-        color_one = _detectBrightColor()
-        color_two = _detectBrightColor()
-        print("Die Helligkeit ist aktuell ", color_one, " und ", color_two)
-
-        # überprüfe ob ein Unterschied zwischen den 2 Werten vor liegt
-        if color_one != color_two:
-            
-            # gebe Wahr zurürck, da ein Farbwechsel statt gefunden hat
-            return True
-
-        else: 
-            # gebe Falsch zurück, da die Farben gleich sind
-            return False
-
-
-    def getRedCoin(self):
-        """ Holt sich einen roten Chip """
-        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
-        while True:
-            # Halte an, wenn die aktuelle Position Null ist oder der Kalibrationssensor berührt wurde
-            if self.currentPosition == 0 or self.calibration_touch_Sensor.is_pressed:
-                time.sleep(.1)
                 self.move_wagon_Motor.stop(stop_action="hold")
-                time.sleep(1)
+
+
+    def driveToColumn(self, destination):
+        ''' fährt bis zur vorgegebenen Zielspalte und bleibt dann stehen.
+
+        Args: destination [int] gibt die Zielspalte an und liegt im Bereich {0, ..., 8}
+        '''
+
+        #TODO Warum ist destionation zu klein??
+
+        destination += 1
+
+
+        # Überprüfe so lange bis man am Ziel ist
+        while True:
+
+            # fahre nach links, wenn das Ziel links von der aktuellen Position
+            # liegt
+            print('Ich bin bei ',self.currentPosition,' und möchte zu ',destination)
+            if destination < self.currentPosition:
+                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
+
+                # wenn ein Farbwechsel statt findet, dann ...
+                if self.ColorHandler.BlackToWhite():
+                    # ... veringere die aktuelle Position um eins, da der Wagen
+                    # nach links fährt
+                    self.currentPosition -= 1
+
+            # fahre nach rechts, wenn das Ziel rechts von der aktuellen
+            # Position liegt
+            elif destination > self.currentPosition:
+                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
+
+                # wenn ein Farbwechsel statt findet, dann ...
+                if self.ColorHandler.WhiteToBlack():
+                    # ... erhöhe die aktuelle Position um eins, da der Wagen
+                    # nach rechts fährt
+                    self.currentPosition += 1
+                    self.print_stats()
+
+            # wenn angekommen am Ziel
+            else:
+
+                # TODO Korrektur von destination
+                destination -= 1
+
+                # halte den Wagen nach kurzen Verzögerung an
+                #time.sleep(self.TIME_OFFSET)
+                self.move_wagon_Motor.stop(stop_action="hold")
+                # TODO TESTE OB ÜBER DEM RICHTIGEN SCHACHT
                 break
 
-            # wenn ein Farbwechsel statt findet, dann ...
-            if self.detectColorChange():
-                # ... veringere die aktuelle Position um eins, da er nach links fährt
-                self.currentPosition += -1
-                self.print_stats()
 
-    def getYellowCoin(self):
-        """ Holt sich einen gelben Chip """
-        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
-        while True:
-            # Halte an, wenn der die aktuelle Position Null ist
-            if self.currentPosition == 8: # TODO TESTE OB DAS MIT 8 STIMMT
-                time.sleep(self.TIME_OFFSET)
-                self.move_wagon_Motor.stop(stop_action="hold")
-                time.sleep(1)
-                break
-
-            # wenn ein Farbwechsel statt findet, dann ...
-            if self.detectColorChange():
-                # ... erhöhe die aktuelle Position um eins, da er nach rechts fährt
-                self.currentPosition += 1
-                self.print_stats()
 
     def releaseCoin(self):
         """ lässt den Spielstein los """
 
-        # Halte zunächst den Wagen an
+        # Halte zunächst den Wagen definitiv an
         self.move_wagon_Motor.stop(stop_action="hold")
 
         # Öffne den Schacht für 1 Sekunde
@@ -149,86 +194,137 @@ class Robot():
         self.chip_release_Motor.run_timed(time_sp=500, speed_sp=550)
         time.sleep(1)
 
-    def manualControl(self):
-        ''' lässt den Wagen links fahren, wenn linker Knopf gedrückt und
-            lässt den Wagen rechts fahren, wenn rechter Knopf gedrückt und
-            blaibt stehen, wenn beide gleichzeitig gedrückt werden.
-        '''
 
-        # führe die Schleife aus bis beide Knöpfe gleichzeitig gedrückt werden
-        while not (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
-
-            # fahre nach links, wenn der linke Knopf gedrückt wird
-            if self.left_touch_Sensor.is_pressed:
-                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
-
-                # wenn ein Farbwechsel statt findet, dann ...
-                if self.detectColorChange():
-                    # ... veringere die aktuelle Position um eins, da der Wagen nach links fährt
-                    self.currentPosition += -1
-                    self.print_stats()
-
-            # fahre nach rechts, wenn der rechte Knopf gedrückt wird      
-            elif self.right_touch_Sensor.is_pressed:
-                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
-
-                # wenn ein Farbwechsel statt findet, dann ...
-                if self.detectColorChange():
-                    # ... erhöhe die aktuelle Position um eins, da der Wagen nach rechts fährt
-                    self.currentPosition += 1
-                    self.print_stats()
-            
-            # Halte den Wagen an, wenn kein Knopf gedrückt wird
-            else: 
-                self.move_wagon_Motor.stop(stop_action="hold")
-
-    def driveToColumn(self, destination):
-        ''' fährt bis zur vorgegebenen Zielspalte und bleibt dann stehen.
-
-        Args: destination [int] gibt die Zielspalte an und liegt im Bereich {0, ..., 8}
-        '''
-
-        # Überprüfe so lange bis man am Ziel ist
+    def getRedCoin(self):
+        """ Holt sich einen roten Chip """
+        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         while True:
+            # Halte an, wenn die aktuelle Position Null ist
+            if self.currentPosition == -1 or self.calibration_touch_Sensor.is_pressed:
+                # Erhalte Roten Chip
 
-            # fahre nach links, wenn das Ziel links von der aktuellen Position liegt
-            if destination < self.currentPosition:
-                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
+                # Hold, lasse den Motor aber noch etwas Weiterfahren,
+                # um unterschiede zwischen, Machanismus, Positionserkennung
+                # und Kalibrierungsknopf
+                time.sleep(.25)
+                self.move_wagon_Motor.stop(stop_action="hold")
 
-                # wenn ein Farbwechsel statt findet, dann ...
-                if self.detectColorChange():
-                    # ... veringere die aktuelle Position um eins, da der Wagen nach links fährt
-                    self.currentPosition += -1
-                    self.print_stats()
+                # Kalibrierung
+                # Dies ist nur auf der roten Seite möglich
+                self.currentPosition = -1
+                self.ColorHandler.calibrateBoundary()
+                print('––––calibrateBoundary()')
+                self.colorstatus = self.ColorHandler.currentColor()
+                time.sleep(3)
 
-            # fahre nach rechts, wenn das Ziel rechts von der aktuellen Position liegt
-            elif destination > self.currentPosition:
+                # Fahre auf das Spielbrett zu Position 1
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
 
-                # wenn ein Farbwechsel statt findet, dann ...
-                if self.detectColorChange():
-                    # ... erhöhe die aktuelle Position um eins, da der Wagen nach rechts fährt
-                    self.currentPosition += 1
-                    self.print_stats()
-            
-            # wenn angekommen am Ziel
-            else:
-                
-                # halte den Wagen nach kurzen Verzögerung an
-                time.sleep(self.TIME_OFFSET)
+                # Ignoriere dabei den ersten Farbübergang ('White' -> 'Black'),
+                # da er eine Dopplung von Position 0 darstellt
+                while self.ColorHandler.WhiteToBlack() == False:
+                    self.print_stats(134)
+                print('–––––erstes Feld übersprungen')
+                self.print_stats(136)
+
+                while self.ColorHandler.BlackToWhite() == False:
+                    self.print_stats(134)
+                print('–––––zweites Feld übersprungen')
+                self.print_stats(136)
+                self.currentPosition += 1
+
+                self.colorstatus = self.ColorHandler.currentColor()
+                # Fahre weiter, Fahre weiter, bis der Übergang zu Position 1
+                # ('Black' -> 'White') erkannt wird
+                while self.ColorHandler.WhiteToBlack() == False:
+                    self.print_stats(143)
+                print('–––––in Position')
+                self.print_stats(145)
+
+                # Hold
+                self.currentPosition += 1
+                self.lastMovement = 'Right'
+                print('GetRedCoin Position: ', self.currentPosition)
                 self.move_wagon_Motor.stop(stop_action="hold")
-                # TODO TESTE OB ÜBER DEM RICHTIGEN SCHACHT
-                break 
 
+                break
 
-    def setRedColor(self):
-        self.leds.set_color("LEFT", "RED")
-        self.leds.set_color("RIGHT", "RED")
+            # halte aktuellen Farbwert fest
+            self.colorstatus = self.ColorHandler.currentColor()
 
-    def setYellowColor(self):
-        self.leds.set_color("LEFT", "YELLOW")
-        self.leds.set_color("RIGHT", "YELLOW")
-    
-    def playMusic(self):
-        # TODO Coole Musik abspielen
-        pass
+            # wenn ein Farbwechsel statt findet, dann ...
+            if self.currentPosition == 1 or self.currentPosition == 9:
+                if self.ColorHandler.WhiteToBlack():
+                    # ... veringere die aktuelle Position um eins
+                    self.currentPosition -= 1
+                    self.print_stats(160)
+            else:
+                if self.ColorHandler.BlackToWhite():
+                    # ... veringere die aktuelle Position um eins
+                    self.currentPosition -= 1
+                    self.print_stats(160)
+
+            self.print_stats(162)
+
+    def getYellowCoin(self):
+        """ Holt sich einen gelben Chip """
+        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
+        while True:
+            # Halte an, wenn der die aktuelle Position Null ist
+            if self.currentPosition == 9: # TODO TESTE OB DAS MIT 9 STIMMT
+                time.sleep(.25)
+                self.move_wagon_Motor.stop(stop_action="hold")
+
+                # Kalibrierung
+                # Dies ist nur auf der roten Seite möglich
+                self.colorstatus = self.ColorHandler.currentColor()
+                time.sleep(3)
+
+                # Fahre auf das Spielbrett zu Position 1
+                self.move_wagon_Motor.run_forever(speed_sp=self.VSLOW_LEFT)
+
+                # Ignoriere dabei den ersten Farbübergang ('White' -> 'Black'),
+                # da er eine Dopplung von Position 0 darstellt
+                while self.ColorHandler.BlackToWhite() == False:
+                    self.print_stats(274)
+                print('–––––erstes Feld übersprungen')
+                self.print_stats(276)
+
+                while self.ColorHandler.WhiteToBlack() == False:
+                    self.print_stats(279)
+                print('–––––zweites Feld übersprungen')
+                self.print_stats(281)
+                self.currentPosition -= 1
+
+                self.colorstatus = self.ColorHandler.currentColor()
+                # Fahre weiter, Fahre weiter, bis der Übergang zu Position 1
+                # ('Black' -> 'White') erkannt wird
+                while self.ColorHandler.BlackToWhite() == False:
+                    self.print_stats(288)
+                print('–––––in Position')
+                self.print_stats(290)
+
+                # Hold
+                self.currentPosition -= 1
+                print('GetYellowCoin Position: ', self.currentPosition)
+                self.lastMovement = 'Left'
+                self.move_wagon_Motor.stop(stop_action="hold")
+
+                break
+
+            # halte aktuellen Farbwert fest
+            self.colorstatus = self.ColorHandler.currentColor()
+
+            # wenn ein Farbwechsel statt findet, dann ...
+            if self.currentPosition == -1 or self.currentPosition == 7:
+                if self.ColorHandler.BlackToWhite():
+                    # ... veringere die aktuelle Position um eins
+                    self.currentPosition += 1
+                    self.print_stats(160)
+            else:
+                if self.ColorHandler.WhiteToBlack():
+                    # ... veringere die aktuelle Position um eins
+                    self.currentPosition += 1
+                    self.print_stats(160)
+
+            self.print_stats(162)
