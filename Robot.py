@@ -21,6 +21,9 @@ class Robot():
         # Nutze die LEDs
         self.leds = Leds()
 
+        # Nutze die Brick-Tasten
+        self.btn = Button()
+
         # Verbinde EV3 mit Tastsensoren
         self.left_touch_Sensor = TouchSensor('in1')
         self.right_touch_Sensor = TouchSensor('in2')
@@ -43,13 +46,41 @@ class Robot():
         # Für richtige Kalibrierung verwende calibrate()
         #self.calibrate()
 
+    def gotoPosition3():
 
-    def print_stats(self, row):
-        print(row, self.colorstatus,
-            self.ColorHandler.color_Sensor.reflected_light_intensity,
-            self.ColorHandler.currentColor(), self.ColorHandler.boundary,
-            self.currentPosition)
+        def left(state):
+            if state:
+                m.run_forever(speed_sp=-500)
 
+            else:
+                m.stop(stop_action="hold")
+
+        def right(state):
+            if state:
+                m.run_forever(speed_sp=500)
+            else:
+                m.stop(stop_action="hold")
+
+        def down(state):
+            if state:
+                return True
+            else:
+                return False
+
+        def enter(state):
+            if state:
+                return True
+            else:
+                return False
+
+        self.btn.on_left = left
+        self.btn.on_right = right
+        self.btn.on_down = down
+        self.btn.on_enter = enter
+
+
+        while True:  # This loop checks buttons state continuously
+            self.btn.process() # calls appropriate event handlers
 
 
     def manualControl(self):
@@ -63,7 +94,8 @@ class Robot():
             # halte aktuellen Farbwert fest
             self.colorstatus = self.ColorHandler.currentColor()
 
-            if self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed:
+            ''' Feld auswählen '''
+            if self.btn.enter or self.btn.down or (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
 
                 time.sleep(.5)
                 if (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
@@ -71,8 +103,8 @@ class Robot():
 
             # fahre nach links, wenn der linke Knopf gedrückt wird und sich
             # der Wagen nicht am Linken Rand befindet
-            elif self.left_touch_Sensor.is_pressed and self.currentPosition != 0:
-                '''das bedeutet nächstes Feld Schwarz -> Weiß'''
+            elif (self.btn.left or self.left_touch_Sensor.is_pressed) and self.currentPosition != 0:
+                # das bedeutet nächstes Feld Schwarz -> Weiß
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
 
                 # Falls sich der Wagen am Rand des Spielbretts befindet ...
@@ -100,7 +132,7 @@ class Robot():
                     self.print_stats(85)
 
             # fahre nach rechts, wenn der rechte Knopf gedrückt wird
-            elif self.right_touch_Sensor.is_pressed and self.currentPosition != 8:
+            elif ((self.btn.right or self.right_touch_Sensor.is_pressed) and self.currentPosition != 8):
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
 
                 if self.currentPosition == 7 or self.currentPosition == 0:
@@ -181,7 +213,6 @@ class Robot():
                 break
 
 
-
     def releaseCoin(self):
         """ lässt den Spielstein los """
 
@@ -200,7 +231,7 @@ class Robot():
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
         while True:
             # Halte an, wenn die aktuelle Position Null ist
-            if self.currentPosition == -1 or self.calibration_touch_Sensor.is_pressed:
+            if self.calibration_touch_Sensor.is_pressed:
                 # Erhalte Roten Chip
 
                 # Hold, lasse den Motor aber noch etwas Weiterfahren,
@@ -266,6 +297,7 @@ class Robot():
 
             self.print_stats(162)
 
+
     def getYellowCoin(self):
         """ Holt sich einen gelben Chip """
         self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
@@ -313,7 +345,7 @@ class Robot():
                 break
 
             # halte aktuellen Farbwert fest
-            self.colorstatus = self.ColorHandler.currentColor()
+            #self.colorstatus = self.ColorHandler.currentColor()
 
             # wenn ein Farbwechsel statt findet, dann ...
             if self.currentPosition == -1 or self.currentPosition == 7:
@@ -328,3 +360,11 @@ class Robot():
                     self.print_stats(160)
 
             self.print_stats(162)
+
+# Debugging –––––––––––––––––––––––––––––––––––––––––––––––––
+    def print_stats(self, row):
+        print(row, self.colorstatus,
+            self.ColorHandler.color_Sensor.reflected_light_intensity,
+            self.ColorHandler.currentColor(), self.ColorHandler.boundary,
+            self.currentPosition)
+

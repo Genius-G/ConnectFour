@@ -10,33 +10,49 @@ class ColorHandler():
         # Put the color sensor into REF-RAW (RGB-RAW before) mode.
         self.color_Sensor.mode = 'REF-RAW'
 
-        #self.colors = {0:'Black', 1:'White'}
-
+        # Lege Startwerte an:
+        # In der momentanen Fassung des Roboters wird nur maxvalue gemessen.
+        # boundary wird daher als maxvalue/2 gehandhabt; andere Konfigurationen
+        # sind allerdings möglich
         self.maxvalue = 100
         self.boundary = 50
         #self.minvalue = 0
         self.valueNow = 100
+
         self.colorNow = 'White'
         self.colorBef = 'White'
 
 
-    # Definiere eine Schwelle zwischen Schwarz und Weiß
     def calibrateBoundary(self):
+        # Definiere eine Schwelle zwischen Schwarz und Weiß
         self.maxvalue = self.color_Sensor.reflected_light_intensity
         self.boundary = self.maxvalue / 2
 
 
-    # Messe die momente reflektierte Lichtintensität und ordne ihr eine Farbe zu
+    def getAvgIntensity(self):
+        # Messe in kurzer Folge 4 Intensitätswerte und bilde über sie den
+        # Durchschnitt
+        intensity1 = self.color_Sensor.reflected_light_intensity
+        intensity2 = self.color_Sensor.reflected_light_intensity
+        intensity3 = self.color_Sensor.reflected_light_intensity
+        intensity4 = self.color_Sensor.reflected_light_intensity
+        avg = (intensity1 + intensity2 + intensity3 + intensity4) / 4
+        # print('currColor:', intensity1, intensity2, intensity3, intensity4, avg)
+        return avg
+
+
     def currentColor(self):
-        if self.color_Sensor.reflected_light_intensity > self.boundary:
+        # Messe die momente reflektierte Lichtintensität und ordne ihr eine
+        # Farbe zu
+        if self.getAvgIntensity() > self.boundary:
             return 'White'
         else:
             return 'Black'
 
 
-    # Prüfe, ob sich die Farbe seit dem letzten Aufruf
-    # dieser Funktion geändert hat
     def colorChanged(self):
+        # Prüfe, ob sich die Farbe seit dem letzten Aufruf
+        # dieser Funktion geändert hat
         self.colorNow = self.currentColor()
         if self.colorBef != self.colorNow:
             print(self.colorBef,' → ',self.colorNow)
@@ -46,8 +62,8 @@ class ColorHandler():
             return False
 
 
-    # Prüfe, ob ein Übergang von Schwarz nach Weiß stattgefunden hat
     def BlackToWhite(self):
+        # Prüfe, ob ein Übergang von Schwarz nach Weiß stattgefunden hat
         if self.colorChanged() and self.colorNow == 'White':
             print('Black → White !')
             return True
@@ -55,14 +71,16 @@ class ColorHandler():
             return False
 
 
-    # Prüfe, ob ein Übergang von Weiß nach Schwarz stattgefunden hat
     def WhiteToBlack(self):
+        # Prüfe, ob ein Übergang von Weiß nach Schwarz stattgefunden hat
         if self.colorChanged() and self.colorNow == 'Black':
             print('White → Black !')
             return True
         else:
             return False
 
+
+# Unused ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
     def detectColorChange(self):
         """ bemerkt einen Farbwechsel von Hell und Dunkel
