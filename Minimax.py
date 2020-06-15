@@ -77,7 +77,7 @@ class Minimax():
             temp.enterPiece(curr_player, col)
             legal_moves.append(temp)
         
-        # gebe
+        # gebe die Güte des Spielbrett zurück
         if depth == 0 or gameboard.checkForWinner() or gameboard.checkForDraw():
             # gebe den Wert des Spielbrettes zurück
             return self.value(gameboard, curr_player)       
@@ -121,4 +121,3 @@ class Minimax():
 
         return my_fours*1000 + my_threes*10 + my_twos - opp_fours*10000
             
-
