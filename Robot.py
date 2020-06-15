@@ -6,15 +6,15 @@ import time
 
 class Robot():
 
-    FAST_RIGHT = 1000
-    SLOW_RIGHT = 300
-    VSLOW_RIGHT = 100
-    FAST_LEFT = -1000
-    SLOW_LEFT = -300
-    VSLOW_LEFT = -100
+    FAST_RIGHT = 600
+    SLOW_RIGHT = 450
+    VSLOW_RIGHT = 300
+    FAST_LEFT = -600
+    SLOW_LEFT = -450
+    VSLOW_LEFT = -300
 
     def __init__(self):
-          # Verbinde EV3 mit Motoren
+        # Verbinde EV3 mit Motoren
         self.move_wagon_Motor = LargeMotor('outA')
         self.chip_release_Motor = Motor('outB')
 
@@ -39,48 +39,12 @@ class Robot():
         self.lastMovement = 'Right'
 
         # Lege einen Start-Wert für self.colorstatus fest
-        self.colorstatus = self.ColorHandler.currentColor()
+        #self.colorstatus = self.ColorHandler.currentColor()
 
         ''' Calibrate wird geändert '''
         # Lege aktuelle Position ohne Kallibrierung fest
         # Für richtige Kalibrierung verwende calibrate()
         #self.calibrate()
-
-    def gotoPosition3():
-
-        def left(state):
-            if state:
-                m.run_forever(speed_sp=-500)
-
-            else:
-                m.stop(stop_action="hold")
-
-        def right(state):
-            if state:
-                m.run_forever(speed_sp=500)
-            else:
-                m.stop(stop_action="hold")
-
-        def down(state):
-            if state:
-                return True
-            else:
-                return False
-
-        def enter(state):
-            if state:
-                return True
-            else:
-                return False
-
-        self.btn.on_left = left
-        self.btn.on_right = right
-        self.btn.on_down = down
-        self.btn.on_enter = enter
-
-
-        while True:  # This loop checks buttons state continuously
-            self.btn.process() # calls appropriate event handlers
 
 
     def manualControl(self):
@@ -92,11 +56,13 @@ class Robot():
         # führe die Schleife aus bis beide Knöpfe gleichzeitig gedrückt werden
         while True:
             # halte aktuellen Farbwert fest
-            self.colorstatus = self.ColorHandler.currentColor()
+            #self.colorstatus = self.ColorHandler.currentColor()
 
             ''' Feld auswählen '''
-            if self.btn.enter or self.btn.down or (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
+            if self.btn.enter or self.btn.down:
+                break
 
+            elif (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
                 time.sleep(.5)
                 if (self.left_touch_Sensor.is_pressed and self.right_touch_Sensor.is_pressed):
                     break
@@ -105,7 +71,8 @@ class Robot():
             # der Wagen nicht am Linken Rand befindet
             elif (self.btn.left or self.left_touch_Sensor.is_pressed) and self.currentPosition != 0:
                 # das bedeutet nächstes Feld Schwarz -> Weiß
-                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
+                self.move_wagon_Motor.run_forever(speed_sp=self.VSLOW_LEFT)
+                self.print_stats(109)
 
                 # Falls sich der Wagen am Rand des Spielbretts befindet ...
                 if self.currentPosition == 1 or self.currentPosition == 8:
@@ -133,7 +100,8 @@ class Robot():
 
             # fahre nach rechts, wenn der rechte Knopf gedrückt wird
             elif ((self.btn.right or self.right_touch_Sensor.is_pressed) and self.currentPosition != 8):
-                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
+                self.move_wagon_Motor.run_forever(speed_sp=self.VSLOW_RIGHT)
+                self.print_stats(137)
 
                 if self.currentPosition == 7 or self.currentPosition == 0:
                     if self.ColorHandler.WhiteToBlack():
@@ -164,13 +132,12 @@ class Robot():
 
     def driveToColumn(self, destination):
         ''' fährt bis zur vorgegebenen Zielspalte und bleibt dann stehen.
-
-        Args: destination [int] gibt die Zielspalte an und liegt im Bereich {0, ..., 8}
+        Args: destination [int] gibt die Zielspalte an
+        und liegt im Bereich {1, ..., 7}
         '''
 
-        #TODO Warum ist destionation zu klein??
-
-        destination += 1
+        # Übersetze aus der Sprache des Algorithmus' in die Sprache des Roboters
+        destination
 
 
         # Überprüfe so lange bis man am Ziel ist
@@ -181,36 +148,41 @@ class Robot():
             print('Ich bin bei ',self.currentPosition,' und möchte zu ',destination)
             if destination < self.currentPosition:
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
-
                 # wenn ein Farbwechsel statt findet, dann ...
-                if self.ColorHandler.BlackToWhite():
+                if self.ColorHandler.WhiteToBlack():
                     # ... veringere die aktuelle Position um eins, da der Wagen
                     # nach links fährt
+                    self.last_Movement = 'Left'
                     self.currentPosition -= 1
 
             # fahre nach rechts, wenn das Ziel rechts von der aktuellen
             # Position liegt
             elif destination > self.currentPosition:
                 self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
-
                 # wenn ein Farbwechsel statt findet, dann ...
-                if self.ColorHandler.WhiteToBlack():
+                if self.ColorHandler.BlackToWhite():
                     # ... erhöhe die aktuelle Position um eins, da der Wagen
                     # nach rechts fährt
+                    self.last_Movement = 'Right'
                     self.currentPosition += 1
-                    self.print_stats()
+                    self.print_stats(203)
 
             # wenn angekommen am Ziel
             else:
+                print(self.last_Movement, self.ColorHandler.currentColor())
+                # Wenn die Mitte des Feldes erreicht ist, oder der Wagen sich
+                # schon am Rand befindet halte den Wagen an
+                if self.last_Movement == 'Left':
+                    if self.ColorHandler.BlackToWhite() or self.currentPosition == 7:
+                        self.move_wagon_Motor.stop(stop_action="hold")
+                        time.sleep(1)
+                        break
 
-                # TODO Korrektur von destination
-                destination -= 1
-
-                # halte den Wagen nach kurzen Verzögerung an
-                #time.sleep(self.TIME_OFFSET)
-                self.move_wagon_Motor.stop(stop_action="hold")
-                # TODO TESTE OB ÜBER DEM RICHTIGEN SCHACHT
-                break
+                if self.last_Movement == 'Right':
+                    if self.ColorHandler.WhiteToBlack() or self.currentPosition == 1:
+                        self.move_wagon_Motor.stop(stop_action="hold")
+                        time.sleep(1)
+                        break
 
 
     def releaseCoin(self):
@@ -228,7 +200,7 @@ class Robot():
 
     def getRedCoin(self):
         """ Holt sich einen roten Chip """
-        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_LEFT)
+        self.move_wagon_Motor.run_forever(speed_sp=self.FAST_LEFT)
         while True:
             # Halte an, wenn die aktuelle Position Null ist
             if self.calibration_touch_Sensor.is_pressed:
@@ -237,7 +209,7 @@ class Robot():
                 # Hold, lasse den Motor aber noch etwas Weiterfahren,
                 # um unterschiede zwischen, Machanismus, Positionserkennung
                 # und Kalibrierungsknopf
-                time.sleep(.25)
+                time.sleep(.1)
                 self.move_wagon_Motor.stop(stop_action="hold")
 
                 # Kalibrierung
@@ -245,11 +217,11 @@ class Robot():
                 self.currentPosition = -1
                 self.ColorHandler.calibrateBoundary()
                 print('––––calibrateBoundary()')
-                self.colorstatus = self.ColorHandler.currentColor()
-                time.sleep(3)
+                #self.colorstatus = self.ColorHandler.currentColor()
+                time.sleep(1)
 
                 # Fahre auf das Spielbrett zu Position 1
-                self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
+                self.move_wagon_Motor.run_forever(speed_sp=self.VSLOW_RIGHT)
 
                 # Ignoriere dabei den ersten Farbübergang ('White' -> 'Black'),
                 # da er eine Dopplung von Position 0 darstellt
@@ -264,7 +236,7 @@ class Robot():
                 self.print_stats(136)
                 self.currentPosition += 1
 
-                self.colorstatus = self.ColorHandler.currentColor()
+                #self.colorstatus = self.ColorHandler.currentColor()
                 # Fahre weiter, Fahre weiter, bis der Übergang zu Position 1
                 # ('Black' -> 'White') erkannt wird
                 while self.ColorHandler.WhiteToBlack() == False:
@@ -281,7 +253,7 @@ class Robot():
                 break
 
             # halte aktuellen Farbwert fest
-            self.colorstatus = self.ColorHandler.currentColor()
+            #self.colorstatus = self.ColorHandler.currentColor()
 
             # wenn ein Farbwechsel statt findet, dann ...
             if self.currentPosition == 1 or self.currentPosition == 9:
@@ -300,19 +272,20 @@ class Robot():
 
     def getYellowCoin(self):
         """ Holt sich einen gelben Chip """
-        self.move_wagon_Motor.run_forever(speed_sp=self.SLOW_RIGHT)
+        self.move_wagon_Motor.run_forever(speed_sp=self.FAST_RIGHT)
+
         while True:
             # Halte an, wenn der die aktuelle Position Null ist
             if self.currentPosition == 9: # TODO TESTE OB DAS MIT 9 STIMMT
-                time.sleep(.25)
+                time.sleep(.1)
                 self.move_wagon_Motor.stop(stop_action="hold")
 
                 # Kalibrierung
                 # Dies ist nur auf der roten Seite möglich
-                self.colorstatus = self.ColorHandler.currentColor()
-                time.sleep(3)
+                #self.colorstatus = self.ColorHandler.currentColor()
+                time.sleep(1)
 
-                # Fahre auf das Spielbrett zu Position 1
+                # Fahre auf das Spielbrett zu Position 7
                 self.move_wagon_Motor.run_forever(speed_sp=self.VSLOW_LEFT)
 
                 # Ignoriere dabei den ersten Farbübergang ('White' -> 'Black'),
@@ -328,7 +301,7 @@ class Robot():
                 self.print_stats(281)
                 self.currentPosition -= 1
 
-                self.colorstatus = self.ColorHandler.currentColor()
+                #self.colorstatus = self.ColorHandler.currentColor()
                 # Fahre weiter, Fahre weiter, bis der Übergang zu Position 1
                 # ('Black' -> 'White') erkannt wird
                 while self.ColorHandler.BlackToWhite() == False:
@@ -348,13 +321,13 @@ class Robot():
             #self.colorstatus = self.ColorHandler.currentColor()
 
             # wenn ein Farbwechsel statt findet, dann ...
-            if self.currentPosition == -1 or self.currentPosition == 7:
-                if self.ColorHandler.BlackToWhite():
+            elif self.currentPosition == -1 or self.currentPosition == 8:
+                if self.ColorHandler.WhiteToBlack():
                     # ... veringere die aktuelle Position um eins
                     self.currentPosition += 1
                     self.print_stats(160)
             else:
-                if self.ColorHandler.WhiteToBlack():
+                if self.ColorHandler.BlackToWhite():
                     # ... veringere die aktuelle Position um eins
                     self.currentPosition += 1
                     self.print_stats(160)
@@ -363,8 +336,9 @@ class Robot():
 
 # Debugging –––––––––––––––––––––––––––––––––––––––––––––––––
     def print_stats(self, row):
-        print(row, self.colorstatus,
+        print(row,
+            self.ColorHandler.currentColor(),
             self.ColorHandler.color_Sensor.reflected_light_intensity,
-            self.ColorHandler.currentColor(), self.ColorHandler.boundary,
+            self.ColorHandler.boundary,
             self.currentPosition)
 
