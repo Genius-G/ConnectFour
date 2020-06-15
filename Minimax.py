@@ -105,7 +105,7 @@ class Minimax():
                 (num of 4-in-a-rows) * 1000 
                 + (num of 3-in-a-rows) * 10 
                 + (num of 2-in-a-rows)
-                - (num of opponent 4-in-a-rows) * 1000
+                - (num of opponent 4-in-a-rows) * 10000
         """
         # Festlegen des Gegenspielers
         if player == self.players[0]:
