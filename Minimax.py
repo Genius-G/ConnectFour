@@ -79,10 +79,10 @@ class Minimax():
         
         # gebe
         if depth == 0 or gameboard.checkForWinner() or gameboard.checkForDraw():
-            # return the heuristic value of node
+            # gebe den Wert des Spielbrettes zurück
             return self.value(gameboard, curr_player)       
         
-        # determine opponent's color
+        # Festlegen des Gegenspielers
         if curr_player == self.players[0]:
             opp_player = self.players[1]
         else:
@@ -96,26 +96,29 @@ class Minimax():
         return alpha
     
 
-    def value(self, gameboard, color):
-        """ Simple heuristic to evaluate board configurations
-            Heuristic is (num of 4-in-a-rows)*99999 + (num of 3-in-a-rows)*100 + 
-            (num of 2-in-a-rows)*10 - (num of opponent 4-in-a-rows)*99999 - (num of opponent
-            3-in-a-rows)*100 - (num of opponent 2-in-a-rows)*10
+    def value(self, gameboard, player):
+        """ Einfache Heuristik um ein Spielbrett auf Güte zu bewerten
+            Args:
+                gameboard[Board] : Das Spielbrett das untersucht wird
+
+            Returns:
+                (num of 4-in-a-rows) * 1000 
+                + (num of 3-in-a-rows) * 10 
+                + (num of 2-in-a-rows)
+                - (num of opponent 4-in-a-rows) * 1000
         """
-        if color == self.players[0]:
-            o_color = self.players[1]
+        # Festlegen des Gegenspielers
+        if player == self.players[0]:
+            o_player = self.players[1]
         else:
-            o_color = self.players[0]
+            o_player = self.players[0]
         
-        my_fours = gameboard.checkForStreak(color, 4)
-        my_threes = gameboard.checkForStreak(color, 3)
-        my_twos = gameboard.checkForStreak(color, 2)
-        opp_fours = gameboard.checkForStreak(o_color, 4)
-        #opp_threes = self.checkForStreak(state, o_color, 3)
-        #opp_twos = self.checkForStreak(state, o_color, 2)
-        if opp_fours > 0:
-            return -100000
-        else:
-            return my_fours*100000 + my_threes*100 + my_twos
+        # Berechne die Reihen in dem Spielbrett
+        my_fours = gameboard.checkForStreak(player, 4)
+        my_threes = gameboard.checkForStreak(player, 3)
+        my_twos = gameboard.checkForStreak(player, 2)
+        opp_fours = gameboard.checkForStreak(o_player, 4)
+
+        return my_fours*1000 + my_threes*10 + my_twos - opp_fours*10000
             
 
