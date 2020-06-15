@@ -27,8 +27,10 @@ class Connect4:
     # Constructor
     def __init__(self):
         self.gameboard = Board() # Gibt das Spielbrett
-        self.player = random.choice([-1, 1])  # legt den Start Spieler fest {-1, 1}
-        self.players = {-1:"Gelb", 1:"Rot"}
+        self.player = 1 #TODO
+        #self.player = random.choice([-1, 1])  # legt den Start Spieler fest {-1, 1}
+        self.colors = {-1:'Gelb', 1:'Rot'}
+        self.player_color = 'Rot' # Rot beginnt
         self.counter = 0 # Anzahl der Spielzuege
         self.finished = False
 
@@ -42,7 +44,7 @@ class Connect4:
                 if self.gameboard.board[i][j] == 0:
                     printstring += " 0 "
                 if self.gameboard.board[i][j] == 1:
-                    # färbt die Chips rot 
+                    # färbt die Chips rot
                     printstring += "\u001b[41;1m\u001b[31m x \u001b[0m\u001b[0m"
                 if self.gameboard.board[i][j] == -1:
                     # färbt die Chips gelb
@@ -55,13 +57,13 @@ class Connect4:
         print("_1__2__3__4__5__6__7_")
 
     def showTurnOrder(self):
-        """ Zeige welcher Spieler an der Reihe ist """ 
+        """ Zeige welcher Spieler an der Reihe ist """
 
         if self.player == -1:
             print("\n––––––\u001b[33;1m Gelb ist am Zug \u001b[0m––––––")
         elif self.player == 1:
             print("\n––––––\u001b[31;1m Rot ist am Zug \u001b[0m––––––")
-                        
+
         # Gebe aktuellen Spielzug aus
         print("Spielzug: ", self.counter)
 
@@ -71,7 +73,7 @@ class Connect4:
 
         # Überprüfe auf (int)
         if readout.isdigit():
-            # Verschiebe aus Bedienungsgründen um 1 
+            # Verschiebe aus Bedienungsgründen um 1
             col = int(readout) - 1
 
             # Überprüfe auf col in {1, ..., 6}
@@ -86,11 +88,11 @@ class Connect4:
                 self.showBoard()
                 print("Ungültige Eingabe! (nicht in {1, ..., 6})")
 
-        
+
         # Falls abgebrochen werden soll
         elif (readout == 'q' or readout == 'quit'):
             self.finished = True
-        
+
         # Falls die Eingabe kein Integer ist
         else:
             print()
@@ -100,9 +102,9 @@ class Connect4:
             print("Ungültige Eingabe! (Kein Integer)")
 
     def showEndOfGame(self):
-        # Überprüfe auf Gewinner 
+        # Überprüfe auf Gewinner
         if self.gameboard.checkForWinner():
-            print("\n–––––– {} hat gewonnen! ––––––\n".format(self.players[self.player]))
+            print("\n–––––– {} hat gewonnen! ––––––\n".format(self.colors[self.player]))
 
         # Überprüfe aus Unentschieden
         elif self.gameboard.checkForDraw():
@@ -114,47 +116,57 @@ class Connect4:
 
     # AI stuff ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
     def randomMove(self):
-        """ returns a random move from possible moves between {1, ..., 7} """
+        """ gebe einen zufällige Zahl zwischen {1, ..., 7} """
         return random.choice(self.gameboard.selectableColumns()) + 1
 
     def calculateResponses(self, difficulty):
-        """ look ahead with minimax """
+        """ schau voraus mit dem minimax Algo
+
+            args: [int] difficulty meint wie viele der Algorithmus im Voraus schaut
+
+            returns: [int] from {0, ..., 6}
+        """
         mini = Minimax(self.gameboard)
         return mini.bestMove(difficulty, self.player)
 
     # Game functions ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––--
     def enterPiece(self, player, col):
-        """ enters the Piece at col for player """
+        """ lässt einen Spielstein fallen in das Spielbrett """
         self.counter += 1
         self.gameboard.enterPiece(player, col)
 
     def passTurn(self):
-        """ passes the turn and changes the current player """
+        """ ändert die Farbe und den aktuellen Spieler der dran ist """
+        # ändere den Spieler von -1 zu 1 und anders rum
         self.player *= -1
-    
+        # ändere die Farbe die dran ist
+        self.player_color = self.colors[self.player]
+
     def main(self):
-        """ This is demonstration on the console """
+        """ Diese Funktion testet den Aufbau und die Implemtierung des Minimax Algorithmus
+            auf der Konsole.
+            """
         print()
         self.showIndicators()
         self.showBoard()
-        
+
         # Game Loop
         while True:
 
             # Zeige welche Farbe am Zug ist
             self.showTurnOrder()
-            
+
             col = -1
             # Testing AI
             if self.player == 1:
-                #col = self.randomMove()
-                col = self.calculateResponses(3)
+                col = self.readInputFromConsole()
+                print(col)
             else:
                 # Lese Input aus der Kommandozeile ein
-                col = self.readInputFromConsole()
+                col = self.calculateResponses(10)
 
             # Überprüfe, ob Spielzug möglich ist
-            if col in self.gameboard.selectableColumns():
+            if True:
 
                 # Werfe einen Chip ein
                 self.gameboard.enterPiece(self.player, col)
@@ -172,7 +184,7 @@ class Connect4:
 
                 # Überprüfe auf Gewinner
                 if self.gameboard.checkForWinner():
-                    self.finished = True 
+                    self.finished = True
 
                 # Überprüfe auf ob Spiel beendet
                 if self.finished:
@@ -180,12 +192,12 @@ class Connect4:
                     break
 
                 # Spielerwechsel
-                self.player *= -1
+                self.passTurn()
 
             else:
                 print("Spalte {} ist schon voll".format(col))
-            
+
 # main Methode zum Ausführen bei Aufruf
-if __name__ == "__main__": 
+if __name__ == "__main__":
     game = Connect4()
     game.main()

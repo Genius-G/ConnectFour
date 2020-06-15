@@ -2,53 +2,76 @@
 
 import numpy as np
 
-
 class Board:
-    """ This class represents a board used in a standart ConnectFour Game """
+    """ Repräsentiert ein klassisches Vier Gewinnt Spielbrett """
 
-    # Constructor
+    # Konstruktor
     def __init__(self):
         self.board = np.zeros((6, 7))
-        self.colors = [-1, 1]
+        self.players = [-1, 1]
 
-    # Enter a piece to the board
     def enterPiece(self, player, col):
-        """ enter a piece the board """
-        # check if desired col is full
+        """ fügt einen Spielstein in das Spielbrett in die Spalte "col" ein.
+            Und simuliert dabei den Fall eines Spielsteines 
+            Args:
+                player[int] : liegt in {-1, 1}
+                col[int] : liegt in {0, ..., 6}
+            Returns:
+                None
+        """
+        # überprüfe, ob eingegebene Spalte schon voll ist
         if col in self.selectableColumns():
             for row in range(5, -1, -1):
-                # check from bottom to top where entered piece stops
+                # check from bottom to top where the entered piece stops
                 if self.board[row][col] == 0:
                     self.board[row][col] = player
                     break
-        else:
-            print("%d ist schon voll.", col)
+        
+        # sage, wenn eine Spalte schon voll ist
+        elif col in range(7):
+            print("Spalte {} ist schon voll.".format(col))
 
+        # sage, wenn col außerhalb liegt
+        else:
+            print("Spalte {} muss in {0, ..., 6} liegen.".format(col))
+            
+ 
     def selectableColumns(self):
-        """ give a list of all selectable columns """
-        selectableColumns = list(range(7))
+        """ gibt eine Teiliste der auswählbaren Spalten """
+
+        selectableColumns = []
         for col in range(7):
-            if self.board[0][col] != 0 and col in selectableColumns:
-                selectableColumns.remove(col)
+            if self.board[0][col] == 0:
+                selectableColumns.append(col)
         return selectableColumns
 
-    # check for number of streaks of length streak: (int)
-    def checkForStreak(self, color, streak):
+    def checkForStreak(self, player, streak):
+        """ Überprüft auf Reihen der Länge "Streak" und gibt 
+            dessen Vorkommen zurück.
+            Args:
+                player[int] : liegt in {-1, 1}
+                streak[int] : liegt in {2, 3, 4}
+            Returns:
+                None
+        """
         count = 0
-        # for each piece in the board...
+        # für jeden Spielstein im Spielbrett ...
         for i in range(6):
             for j in range(7):
-                # ...that is of the color we're looking for...
-                if self.board[i][j] == color:
-                    # check if a vertical streak starts at (i, j)
+
+                # ... welches zum "player" gehört
+                if self.board[i][j] == player:
+
+                    # überprüfe auf vertikale Reihe bei (i, j)
                     count += self.verticalStreak(i, j, streak)
                     
-                    # check if a horizontal four-in-a-row starts at (i, j)
+                    # überprüfe auf horizontale Reihe bei (i, j)
                     count += self.horizontalStreak(i, j, streak)
                     
-                    # check if a diagonal (either way) four-in-a-row starts at (i, j)
+                    # überprüfe auf diagonale Reihe bei (i, j)
                     count += self.diagonalCheck(i, j, streak)
-        # return the sum of streaks of length 'streak'
+
+        # gebe die Summe der Reihen der Länge "streak" zurück
         return count
             
     def verticalStreak(self, row, col, streak):
@@ -80,7 +103,7 @@ class Board:
     def diagonalCheck(self, row, col, streak):
 
         total = 0
-        # check for diagonals with positive slope
+        # überprüfe für Diagonal mit positiver Steigung
         consecutiveCount = 0
         j = col
         for i in range(row, 6):
@@ -90,12 +113,13 @@ class Board:
                 consecutiveCount += 1
             else:
                 break
-            j += 1 # increment column when row is incremented
+            # erhöhe Spalte, wenn Reihe erhöht wird
+            j += 1 
             
         if consecutiveCount >= streak:
             total += 1
 
-        # check for diagonals with negative slope
+        # überprüfe für Diagonal mit negativer Steigung
         consecutiveCount = 0
         j = col
         for i in range(row, -1, -1):
@@ -105,22 +129,23 @@ class Board:
                 consecutiveCount += 1
             else:
                 break
-            j += 1 # increment column when row is incremented
+            # erhöhe Spalte, wenn Reihe erhöht wird
+            j += 1
 
         if consecutiveCount >= streak:
             total += 1
 
         return total
 
-    # Check For a Winner
-    def checkForWinner(self):       
-        if self.checkForStreak(self.colors[0], 4) > 0 or self.checkForStreak(self.colors[1], 4) > 0:
+    def checkForWinner(self):
+        """ überprüft auf Gewinner und gibt dann Wahr zurück """
+        if self.checkForStreak(self.players[0], 4) > 0 or self.checkForStreak(self.players[1], 4) > 0:
             return True
         else:
             return False
 
-    # Check For a Draw
     def checkForDraw(self):
+        """ überprüft auf ein Unentschieden und gibt dann Wahr zurück """
         if len(self.selectableColumns()) == 0:
             return True
         else: 

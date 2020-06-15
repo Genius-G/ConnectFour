@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from Connect4 import *
-from Robot import *
+from Robot import Robot
+from Connect4 import Connect4
 
 class LegoRobot():
 
@@ -9,30 +9,47 @@ class LegoRobot():
         self.robot = Robot()
         self.game = Connect4()
 
-    def humanPlayersTurn(self):
-        # hole einen roten Chip
-        self.robot.getRedCoin()
+    def humanPlayersTurn(self, color):
 
-        # Übergebe die Kontrolle dem meschlichen Spieler
+        # überprüfe welche Farbe der menschliche Spieler hat
+        if color == 'Rot':
+            # hole einen roten Chip
+            # self.robot.setRedColor()
+            self.robot.getRedCoin()
+
+        elif color == 'Gelb':
+            # hole einen gelben Chips
+            # self.robot.setYellowColor()
+            self.robot.getYellowCoin()
+
+        # Übergebe die Kontrolle dem menschlichen Spieler
         self.robot.manualControl()
-        # Er bestätigt die Eingabe mit Enter
+        # Er bestätigt durch beide gleichzeitig
 
         # Zum Schluss wird der Coin eingeschmissen beim Roboter ...
         self.robot.releaseCoin()
         # ... und beim Game
-        self.game.enterPiece(1, self.robot.getCurrentPosition())
+        self.game.enterPiece(self.game.player, self.robot.currentPosition - 1)
 
-    def robotPlayersTurn(self):
-        # hole einen roten Chip
-        self.robot.getYellowCoin()
+    def robotPlayersTurn(self, color):
+        # überprüfe welche Farbe der Roboter Spieler hat
+        if color == 'Rot':
+            # hole einen roten Chip
+            #self.robot.setRedColor()
+            self.robot.getRedCoin()
 
-        # TODO Der Rest der Stuerung 
-        """ Darin wird die Funktion self.game.randomMove() verwendet zum Testen.
-            diese gibt eine Zahl zwischen 1 und 7.
-            Wenn der Minimax Algorithmus funktioniert nimmt man die Funktion
-            self.game.calculateResponse() 
-            diese gibt auch eine Zahl zwischen 1 und 7.
-        """
+        elif color == 'Gelb':
+            # hole einen gelben Chip
+            #self.robot.setYellowColor()
+            self.robot.getYellowCoin()
+
+        # Übergebe die Kontrolle dem meschlichen Spieler
+        self.robot.driveToColumn(self.game.calculateResponses(5) + 1)
+
+        # Zum Schluss wird der Coin eingeschmissen beim Roboter ...
+        self.robot.releaseCoin()
+        # ... und beim Game
+        self.game.enterPiece(self.game.player, self.robot.currentPosition - 1)
 
     def play_Game(self):
         """ Diese Funktion ist der Ablauf des Lego Roboters.
@@ -40,22 +57,31 @@ class LegoRobot():
             Darin spielt ein Mensch gegen den Roboter.
         """
 
+        # Kalibrierung
+        #self.robot.calibrate()
+
         # Game Loop
         while self.game.finished == False:
 
             # Der menschliche Spieler ist an der Reihe
             if self.game.player == 1:
-                self.humanPlayersTurn()
+
+                self.humanPlayersTurn(self.game.player_color)
 
             # Der Roboter ist an der Reihe
             else:
-                self.robotPlayersTurn()
-                
+                self.robotPlayersTurn(self.game.player_color)
+
+            # Gebe zum Debuggen ein virtuelles Feld auf der Konsole aus
+            self.game.showBoard()
+
             # Nachdem einer der beiden dran war, wird getauscht
             self.game.passTurn()
 
         # Wenn gewonnen wurde, dann eine coole Melodie spielen
         self.robot.playMusic()
+
+
 
 if __name__ == "__main__": # Default "main method" idiom.
     LegoRobot = LegoRobot()
