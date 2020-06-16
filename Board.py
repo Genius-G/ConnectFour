@@ -114,7 +114,7 @@ class Board:
             else:
                 break
             # erhöhe Spalte, wenn Reihe erhöht wird
-            j += 1 
+            j += 1  
             
         if consecutiveCount >= streak:
             total += 1
