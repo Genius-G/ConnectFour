@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ger">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="Silas, Jens, Sophie">
+<link rel="icon" href="assets/img/favicon2.ico">
+<title>LEGO EV3 Roboter</title>
+<!-- Bootstrap core CSS -->
+<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/mediumish.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Begin Nav
+================================================== -->
+<nav class="navbar navbar-toggleable-md navbar-light bg-white fixed-top mediumnavigation">
+<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="container">
+	<!-- Begin Logo -->
+	<a class="navbar-brand" href="index.html">
+	<img src="assets/img/logo.png" alt="logo">
+	</a>
+	<!-- End Logo -->
+	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+		<!-- Begin Menu -->
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="index.html">Artikel <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Ergebnis">Ergebnis </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Verlauf">Verlauf </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Konstruktion">Konstruktion </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Code">Code </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Anleitung">Anleitung </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Probleme">Probleme </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Ausblick">Ausblick </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#Literatur">Literatur </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="author.html">Wer wir sind </a>
+			</li>
+		</ul>
+		<!-- End Menu -->
+	</div>
+</div>
+</nav>
+<!-- End Nav
+================================================== -->
+
+<!-- Begin Article
+================================================== -->
+<div class="container">
+	<div class="row">
+
+		<!-- Begin Fixed Left Share -->
+		<div class="col-md-2 col-xs-12">			
+		</div>
+		<!-- End Fixed Left Share -->
+
+		<!-- Begin Post -->
+		<div class="col-md-8 col-md-offset-2 col-xs-12">
+			<div class="mainheading">
+
+				<!-- Begin Top Meta -->
+				<div class="row post-top-meta">
+					<div class="col-md-2">
+						<a href="author.html"><img class="author-thumb" src="assets/img/Gruppenbild.jpg"></a>
+					</div>
+					<div class="col-md-10">
+						<a class="link-dark" href="author.html">Jens, Sophie, Silas </a>
+						<span class="author-description">Studenten der <b>Uni Heidelberg</b>. </span>
+						<span class="post-date">30 Juni 2020</span><span class="dot"></span>
+					</div>
+				</div>
+				<!-- End Top Meta -->
+
+				<h1 class="posttitle">Lego EV3 Roboter</h1>
+
+			</div>
+
+			<!-- Begin Featured Image -->
+			<img class="featured-image img-fluid" src="assets/img/Money_Shot_02.JPG" alt="Money Shot LEGO Roboter">
+			<cite> <small> Abbildung 1  </small> </cite>
+			<br>
+			<br>
+			<!-- End Featured Image -->
+
+			<!-- Begin Post Content -->
+			<div class="article-post">
+
+				<h2> Gliederung </h2>
+				
+				<ul>
+					<li><a href="#Aufgabenstellung">Aufgabenstellung des Projektes</a></li>
+					<li><a href="#Ergebnis">Ergebnis</a></li>
+					<ul>
+					<li><a href="#Verlauf">Projektverlauf</a></li>
+					<li><a href="#Konstruktion">Konstruktion</a></li>
+					<li><a href="#Code">Code</a></li>
+					</ul>  
+					<li><a href="#Anleitung">Verbindung zum EV3-Brick </a></li>
+					<li><a href="#Probleme">Aufgetretene Probleme</a></li>
+					<ul>  
+					<li><a href="#Freiheiten">Freiheiten in manualControll()</a></li>
+					<li><a href="#Off-by-One">Off-by-One-Fehler in getYellowCoin()</a></li>
+					</ul>
+					<li><a href="#Ausblick">Ausblick</a><br>
+					<li><a href="#Literatur">Literatur</a><br>
+				</ul>
+				
+				<p> <strong> "Lego-in-a-row" – Gruppe A </strong> 
+					<br>
+					Wintersemester 2019/2020 
+					<br>
+				</p>
+				<p>
+					Teilnehmende Personen:
+					<br>
+				</p>
+				<p>
+					Jens Marton (3. Semester, Angewandte Informatik) 
+					<br>
+					Silas Gramlich  (5. Semester, Angewandte Informatik und Mathematik mit Lehramtsoption) 
+					<br>
+					Sophie Engelbrecht (5. Semester, Geographie)
+					<br>								
+				</p>
+				<p>
+					Betreuende Person: 
+					<br>
+					Simon Kohlhepp
+				</p>
+				
+				<h2><a id="Aufgabenstellung">Aufgabenstellung des Projektes</a></h2>
+				<p> 
+					Die Aufgabenstellung des Projekts "Lego 4-in-a-row" bestand darin, einen Roboter zu konstuieren und programmieren, gegen den man das Spiel "4-Gewinnt" spielen kann. Als Grundlage stand dafür ein Lego Mindstorms EV3 Set auf Basis von EV3dev, weitere Lego Technic Bauteile, sowie ein 4-Gewinnt-Spiel zur Verfügung. Zu verwenden war die Programmiersprache Python3.
+				</p>
+				
+				<h3><a id="Verlauf"> Projektverlauf </a></h3>
+				<p>   
+					Anfangs begannen wir damit, Ideen zu sammeln. Eine große Inspiration war uns ein Video des GBC-Builders Akiyuki, dessen Sotiermaschine mit hoher Geschwindigkeit zwei verschiedenen Arten von Bällen sotiert (vgl. Akiyuki 2015). Um diese Geschwindigkeit zu erreichen, entfernte er schwere Komponenten des Roboters aus den beweglichen Teilen und brachte sie an die Basis an. Schaut man sich das Video an sieht man, dass der bewegliche Arm von zwei Motoren von der Seite gesteuert wird. Durch die Positionierung der schweren Motoren und Sensoren, sowie schweren Teilen weg von den beweglichen Teilen, wird die Konstuktion leichter und schneller. 
+					<br>
+				<p>
+					Dies war von Anfang an unser Ausgangspunkt, um eine hohe Geschwindigkeit und Präzision zu erreichen. Allerdings lässt sich unser Roboter nicht vollständig mit dem von Akiyuki (2015) vergleichen, da die Verfügbarkeit einiger benötigter Bauteile (beispielsweise Achsen >32L) im Lego Sortiment eingeschränkt ist. Diese selbst anzufertigen schien der Aufgabe des Projekts nicht gerecht.
+				</p>
+				<p>
+					Wir haben das Projekt zur Orientierung in vier verschiedenen Abschnitte unterteilt, wobei die einzelen Abschnitte meist nahtlos ineinander übergingen und sich teilweise überschnitten.
+				</p>
+
+				<p>    
+				1. Konzeptsammlung.
+				</p>
+				<p>
+					In der ersten Phase der Konzeptsammlung, haben wir uns zunächst einen Überblick über die einzelnen Motoren und Sensoren gemacht, deren Funktionsweise, Ansteuerung und Einschränkungen. Dadurch hatten wir später einen besseren Überlick und wussten, wie und wo sie am besten Eingesetzt werden konnten. Außerdem konnten Codeabschnitte später teilweise wiederverwendet werden.
+				</p>
+				<p>
+					2. Praktische Umsetzung.
+				</p>
+				<p>
+					In der zweiten Phase wurden die später genutzten Motoren zusammengestellt und in einer ersten Konstruktion zusammengefügt.
+				</p>
+				<p>
+					3. Prototypen
+				</p>
+
+				<img class="featured-image img-fluid" src="assets/img/CSensor Prototype.jpg" alt="Prototyp">
+				<cite> <small> Abbildung 2  </small> </cite>
+				<br><br>
+
+				<p>
+					In der dritten Phase wurde die Konstuktion eines ersten Roboters fertig gestellt. Er bestimmte unseren späteren Weg, auch wenn einzelne Teile noch weiter verbessert wurden.
+				</p>
+				<p>
+					4. Spiellogik
+				</p>
+				<p>
+					In der letzten Phase haben wir die Spiellogik implementiert. Sie unterteilte sich in die Logik des Spiels und der Ansteuerung des Wagens. Sie wir in einem späteren Teil unter  "Code" noch einmal näher betrachtet.
+				</p>
+				<p>
+					5. Ergebnis <a id="Ergebnis"></a> 
+				</p>
+				<p>
+					In diesem Video demonstrieren wir, dass unser Roboter die Aufgabenstellung erfüllt.
+				</p>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/O_IG7ver76Y" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				<br>
+				<br>
+				
+				<h3><a id="Konstruktion"> Konstruktion </a></h3>
+				
+				<p>
+					Der Roboter besteht aus verschiedenen Segmenten, alle unterschiedliche Funktionen übernehmen. Die Unterteilung erfolgt in:
+				</p>
+				<ul>
+					<li><a href="#Brick">Brick</a></li>
+					<li><a href="#Wagen">Wagen</a></li>
+					<li><a href="#Schiene">Führungsschiene</a></li>
+					<li><a href="#Kette">Antriebskette</a></li>
+					<li><a href="#DSensor">Drucksensor</a></li>
+					<li><a href="#FSensor">Farbsensor</a></li>
+					<li><a href="#Streifen">Farbstreifen</a></li>
+					<li><a href="#MMotor">Medium Motor</a></li>
+					<li><a href="#LMotor">Large Motor “Antriebsmotor”</a></li>
+					<li><a href="#ChipDisp">Chip Dispenser</a></li>
+					<li><a href="#Geruest">Gerüst</a></li>
+					<li><a href="#Controller">Controller</a></li>
+				</ul>
+				
+				Bei der Konstruktion des Roboters hatten wir von Anfang an im Sinn, den Roboter erweiterbar zu gestalten (vgl. <a href="#Ausblick">Ausblick</a>). Um dies zu erreichen machten wir uns einige Lektionen aus unserer Inspirations- und Konzeptsammlungs-Phase zu Nutzen:
+				<br>
+				<br>
+				Der Roboter sollte mit möglichst wenig Sensoren und Motoren auskommen, ohne dabei an Funktionalität einzubüßen. Dazu war angedacht, Motoren ggf. für mehrere Aufgaben gleichzeitig zu verwenden, wie es auch in unserer Inspiration (vgl. Akiyuki 2015) zu sehen ist. Für uns bedeutete dies, zu versuchen überall da wo kein hohes Maß an Präzision, sondern nur reine Kraft gefordert wird, statt weiteren Motoren Mechanismen einzusetzen. Aus dieser Überlegung folgte sehr direkt die Idee des <a href="#ChipDisp">Chip-Dispensers</a>.
+				<br>
+				<br>
+				Eine weitere grundlegende Überlegung war, dass man bei klassische Lego-Connect-4 Robotern typischerweise eine der drei folgenden Varianten erwartet:
+				<ul>
+				<li><b>Festes Spielbrett – Mobiler Roboter</b>
+					<br>
+					In diesem Fall findet man meistens einen klassischen Lego-Roboter mit Reifen, oder einer Zahnradführung vor, der sich komplett entlang des festen Spielfeldes bewegen und an der richtigen Position angekommen durch einem Mechanismus einen Chip aus einem Reservoir (das er mit sich führt) in das Spielbrett fallen lassen kann.</li><br>
+					
+				<li><b>Mobiles Spielbrett – Fester Roboter</b>
+					<br>
+					Etwas seltener aber durchaus gebrauchstauglich ist die Umkehrung der oben genannten Variante. Dabei erwartet man einen stationären Roboter mit stationärem Reservoir, der über ein Schienensystem ein bewegliches Spielbrett manipulieren und so Chips in den Spalten des Bretts platzieren kann.</li><br>
+				
+				<li><b>Hybrid</b>
+					<br>
+				Dies umfasst alle Roboter, die sowohl stationäre funktionale Teile verwenden, als auch ein stationäres Spielrett. Typischerweise befindet sich bei diesen Robotern der Brick an einem festverbauten Platz relativ zum Spielbrett, während ein mobiler, per Kabel verbundener Wagen (ähnlich zu Variante 1) zur gewünschten Stelle am Brett fährt und dort einen Chip aus einem meist mitgeführten Reservoir in das Spielbrett einwirft.
+				</li>
+				<br>
+				
+				</ul>
+				
+				<p>Unsere Überlegung war es, die Vorteile aller Versionen zu vereinen. Unser Plan war es, möglichst hohe Präzision zu gewinnen, indem möglichst viele massereiche Bauteile des Roboters zu stationären Einheiten erklärt werden. Dies Beinhaltet das Spielbrett, den Brick, die Chip-Reservoirs, aber auch den sehr massereichen großen Motor. Eine ähnliche Technik kann auch in Akiyukis Roboter beobachtet werden, wobei hier Geschwindigkeit der treibende Entwicklungsfaktor zu sein schien (vgl. Akiyuki 2015). Während leichte bewegliche Komponenten natürlich auch höhere Geschwindigkeiten ermöglichen stand für uns stets im Vordergrund, dass mit geringer Masse auch geringe Trägheit im System einhergeht. So entstand die Idee des beweglichen <a href="#Wagen">Wagens</a>, der nur genau die Bauteile am Roboter hin und her bewegen müsste, die dies <i>wirklich</i> benötigen. Nach Abwähgung unserer Optionen kamen wir zu dem Ergebnis, dass dies für uns nur einen Farbsensor, einen kleinen Motor, sowie einen Chip betreffen würde. Wäre es uns möglich gewesen mit geringem Aufwand selbst eine >32L Lego Achse anzufertigen hätte sich zu Anfang sogar die Möglichkeit geboten, mit einem roten 8-Tooth Slip Gear den kleinen Motor komplett auszulagern und damit zusätzlich erheblich Masse einzusparen. Dies wird nicht im <a href="#Ausblick">Ausblick</a> aufgeführt, kann aber durchaus auch als Erweiterung in Betracht gezogen werden.
+					<br>
+					<br>
+					Die ersten Ideen befanden sich somit in Planung und unsere drei Grundprinzipien für die Konstruktion des Roboters und unsere allgemeine Richtung waren damit beschlossen:
+					<br>
+					<b>Erweiterbarkeit</b>, <b>Mehrfachbelegung</b> und <b>kleine bewegliche Massen</b>. Im Laufe der Projektentwicklung haben wir uns maßgeblich an diesen Forderungen an uns selbst orientiert.
+				</p>
+				
+				<p> Im weiteren folgt eine Übersicht der einzelnen Bau-Komponenten:
+
+				</p>
+
+				<h4><a id="Brick">Brick</a></h4>
+
+				<img class="featured-image img-fluid" src="assets/img/Brick_02.JPG" alt="Brick">
+				<cite> <small> Abbildung 3 </small> </cite>
+				<br><br>
+
+				<p>
+					Der EV3-Brick ist die Recheneinheit des Roboters. Er übernimmt die Signalauswertung, Steuerung der Motoren, sowie die Berechnung der gegnerischen Spielzüge. Außerdem lässt sich im menschlichen Zug der <i>Wagen</i> über die vorne am Brick befindlichen <i>Druckknöpfe</i> steuern. “Rechts” und “Links” stehen dabei für die entsprechenden Bewegungsrichtungen, “Unten” und “Center” bestätigen die Position. 
+				</p>
+				<img class="featured-image img-fluid" src="assets/img/Brick_01.JPG" alt="Brick am Roboter">
+				<cite> <small> Abbildung 4  </small> </cite>
+				<br><br>
+				<p>
+					Er ist mit einer leichten Neigung zur besseren Bedienbarkeit der Knöpfe fest am <i>Gerüst</i> montiert.
+				</p>
+
+				<h4><a id="Wagen">Wagen</a></h4>
+				<img class="featured-image img-fluid" src="assets/img/Wagen_05.JPG" alt="Wagen">
+				<cite> <small> Abbildung 5  </small> </cite>
+				<br><br>
+
+				<p>
+					Der bewegliche Wagen ist das funktionale Kernstück des Roboters. Er ist fest mit der <i>Antriebskette</i> verbunden und kann so vom <i>Large Motor</i> oberhalb des Spielbretts linear hin und her bewegt werden. Dazu fährt der Wagen entlang einer zentralen <i>Führungsschiene</i> mit der er zwischen den Rädern auf seiner Unterseite über zwei 5 Studs lange Anschläge interagiert. Er kann auf diese weise auf einer Strecke von insgesamt 30cm bewegt werden.
+					<br>
+					<br>
+					Auf seiner Rückseite beherbergt der Wagen den <i>Medium Motor</i> sowie den <i>Farbsensor</i>, welche zusammen unterhalb der Führungsschiene montiert sind, neben der Positionierung des <i>Farbstreifens</i> wegen auch um den Schwerpunkt des Wagens niedrig zu halten und ein Kippen zu entmutigen. Sie sind jeweils über ein <i>50cm Kabel</i> mit dem <i>EV3 Brick</i> verbunden und werden permanent mit dem Wagen mitbewegt.
+					<br>
+					<br>
+
+					<img class="featured-image img-fluid" src="assets/img/Filler_02.JPG" alt="Wagen">
+					<cite> <small> Abbildung 6 </small> </cite>
+					<br><br>
+					
+					Auf der Vorderseite des Wagens und über dem Spielbrett befindet sich ein <i>Schacht</i> in dem jeweils ein Chip pro Zug zur gewünschten Spalte des Spielbretts gefahren und dort abgeliefert werden kann. Dazu fährt der <i>Medium Motor</i> den im Schacht befindlichen Sicherungsstab (Lego Achse) ein und aus und erlaubt so dem Chip nach unten, in das Spielbrett, zu fallen. Die Steuerung des Wagens wird je nach Zug abwechselnd vom Roboter und vom menschlichen Spieler übernommen, wobei Letzterem der Indikator auf der Vorderseite des Wagens und der Wagen Selbst als <i>visuelles Feedback</i> dienen.<br>
+					<br>
+					Außerdem löst die Bewegung des Wagens komplett mechanisch die <i>Chip Dispenser Mechanismen</i> zur rechten und linken Seite des Spielbretts aus. Weiterhin betätigt er auch den auf der linken Seite befindlichen <i>Drucksensor</i> zur Kalibrierung des Farbsensors.<br>
+					<br>
+					Gemäß unserem Grundsatz der Multifunktionalität erfüllt der Wagen also mehrere Aufgaben auf einmal. Er wurde außerdem entsprechend der Baulichen limitierungen so leicht wie möglich gehalten, um insgesamt eine möglichst kleine Masse bewegen zu müssen.
+				</p>
+
+				<h4><a id="Schiene">Führungsschiene</a></h4>
+				<img class="featured-image img-fluid" src="assets/img/Wagen_04.JPG" alt="Führungsschiene">
+				<cite> <small> Abbildung 7 </small> </cite>
+				<br><br>
+
+				<p>
+					Die Führungsschiene des Wagens befindet sich auf einer Höhe mit dem oberen Rand des Spielbretts zwischen den Umlenkrollen der Antriebskette und dient dazu, dem Wagen einen ebenen Grund zu bieten. Dazu existieren an ihren beiden äußeren Rändern zwei Fahrspuren, die aus den Seitenflächen einiger Lego System Steine bestehen. Zwischen den beiden Fahrspuren befindet sich eine Erhöhung, die zusammen mit den Anschlägen auf der Unterseite des Wagens dafür sorgt, dass sich der Wagen stets nahezu parallel zur Schiene bewegt.
+				</p>
+				<h4><a id="Kette">Antriebskette</a></h4>
+				<img class="featured-image img-fluid" src="assets/img/Chain_01.JPG" alt="Die Kette">
+				<cite> <small> Abbildung 8 </small> </cite>
+				<br><br>
+				<p>
+					Als Hauptinstrument zur Kraftübertragung im Roboter dient die etwa 95cm lange Antriebskette aus Technic Chain Links. Sie verläuft zwischen je zwei Umlenkrollen zu beiden Seiten des Spielbretts oberhalb der <i>Führungsschiene</i>, wo der <i>Wagen</i> fest über Zähne mit ihr verbunden ist, und wird unter der Schiene im Inneren des <i>Gerüsts</i> wieder zurück zum <i>Antriebsmotor</i> geführt. Auf der Seite des Antriebsmotors befindet sich ein Gummizug, über den die Kette auf Spannung gehalten wird. Durch die Kette wird die Kraft des Antriebsmotors auf den Wagen und somit auch auf die <i>Chip Dispenser Mechanismen</i> und den <i>Drucksensor</i> übertragen.
+				</p>
+
+				<h4><a id="DSensor">Drucksensor</a></h4>
+
+				<img class="featured-image img-fluid" src="assets/img/DSensor.JPG" alt="Drucksensor">
+				<cite> <small> Abbildung 9 </small> </cite>
+				<br><br>
+
+				<p>
+					Der Drucksensor befindet sich auf der linken Seite des Roboters unterhalb des <i>Chip Dispensers</i>. Er detektiert eine Berührung durch den <i>Wagen</i>. Wird der Sensor ausgelöst Signalisiert dies dem Brick, dass sich der <i>Farbsensor</i> am Wagen über einem weißen Feld des <i>Farbstreifens</i> befindet und der Chip Dispenser vollständig betätigt wurde. Dies nutzt der Roboter um am Anfang des Spiels den Roboter zu initialisieren und im weiteren Laufe des Spiels das Verhalten der Farbsensorauswertung fortwährend an eventuelle Änderungen des Umgebungslichts anzupassen. Der Sensor lässt sich zur Feinjustierung über eine verschiebbare Aufhängung an zwei Lego Technic Achsen exakt (d.h. unabhängig vom festen Lego Grid) positionieren. Ein 35cm Kabel verbindet den Sensor über eine Kabelführung im Gerüst mit dem Eingang “In3”.
+				</p>
+
+				<h4><a id="FSensor">Farbsensor</a></h4>
+
+				<img class="featured-image img-fluid" src="assets/img/CSensor_03.JPG" alt="Beschreibung">
+				<cite> <small> Abbildung 10 </small> </cite>
+				<br><br>
+				
+				<p>
+					Der Farbsensor auf der Hinterseite des <i>Wagens</i> dient dem Roboter zur Positionsfindung. Der Farbsensor wird im Modus “RAF-RAW” betrieben und liefert Helligkeitswerte zwischen 0 und 400 anhand der detektierten Intensität im roten Farbkanal. Er ist so montiert, dass er stets auf den <i>Farbstreifen</i> unterhalb der <i>Schiene</i> deutet und dort Werte misst. 
+				</p>
+
+				<img class="featured-image img-fluid" src="assets/img/CSensor_01.JPG" alt="Farbsensor">
+				<cite> <small> Abbildung 11  </small> </cite>
+				<br><br>
+
+				<p>
+					Zur Verbesserung des Signals ist der Farbsensor einen Stud weit vom Farbstreifen entfernt montiert, was den Messbereich vergrößert, aber gerade klein genug hält, um mit der Auflösung des Farbstreifens arbeiten zu können. 
+				</p>
+				<img class="featured-image img-fluid" src="assets/img/CSensor_02.JPG" alt="Farbsensor">
+				<cite> <small> Abbildung 12  </small> </cite>
+				<br><br>
+				<p>
+					Der Sensor ist außerdem mit einem Lichtschutz ausgestattet, der den Messbereich gegen Umgebungslicht abschirmt. Über ein 50cm Kabel ist der Sensor entlang der Rückseite des Roboters mit dem Eingang “In4” verbunden. Dies ermöglicht dem Roboter, den Sensor frei entlang des Spielbretts zu bewegen.
+				</p>
+
+				<h4><a id="Streifen">Farbstreifen</a></h4>
+				
+				<img class="featured-image img-fluid" src="assets/img/Farbstreifen_01.JPG" alt="Farbstreifen">
+				<cite> <small> Abbildung 13 </small> </cite>
+				<br><br>
+				<p>
+					Unterhalb der <i>Führungsschiene</i>, auf der Rückseite des Spielbretts ist ein Farbstreifen montiert, der dem Roboter als Orientierung für die Position des Wagens dient. Der eigentliche Farbstreifen selbst besteht aus Papier und ist 30cm lang und 3 Studs breit. Er ist mit zwei Streifen Tesafilm auf einer neutral gefärbten, 41 Studs langen und 3 Studs breiten Fläche montiert, die mit dem Gerüst des Roboters verbunden ist. Dabei ist zu beachten, dass der Farbstreifen aufgrund der Position des Farbsensors am <i>Wagen</i> ebenfalls leicht zur Brick-Seite hin versetzt ist. Die korrekte Position des Farbstreifens ist mit zwei roten Pins markiert. 
+				</p>
+				<img class="featured-image img-fluid" src="assets/img/Back_02.JPG" alt="Farbstreifen">
+				<cite> <small> Abbildung 14 </small> </cite>
+				<br><br>	
+				<p>
+					Der Farbstreifen ist in 18 Felder unterteilt, die abwechselnd schwarz und weiß gefärbt sind. Der Roboter orientiert sich an den Übergängen zwischen diesen Feldern. Die inneren 14 Felder korrelieren dabei mit den sieben vertikalen Schächten des Spielbretts. Zwei dieser 14 Felder sind gemeinsam 33mm breit und genau einem Schacht des Spielbretts zugeordnet. Der Übergang zwischen diesen beiden Feldern (von links gelesen Schwarz nach Weiß) markiert dabei jeweils die Mitte eines Schachts, die Übergänge nach Außen hin (von links gelesen Weiß nach Schwarz) repräsentieren die Übergänge zwischen den Schächten. Auf diese Weise kann anhand der Bewegungsrichtung und der Art des detektierten Übergangs die Position des Wagens auf dem Brett bis auf drei Positionen pro Schacht genau bestimmt werden.
+					<br>
+					<br>
+					Die übrigen vier Farbfelder (jeweils zwei auf der rechten und linken Seite) korrelieren mit den <i>Chip Dispenser Mechanismen</i>. Das erste Feld markiert den Arbeitsweg und das Verlassen des Spielfeldes, während das zweite den Stop des Wagens signalisiert. Der Übergang zwischen diesen beiden Feldern ist durch eine bewegliche Maske justierbar.
+				</p>
+
+				<h4><a id="MMotor">Medium Motor</a></h4>
+				
+				<img class="featured-image img-fluid" src="assets/img/MMotor.JPG" alt="Motor">
+				<cite> <small> Abbildung 15 </small> </cite>
+				<br><br>
+				<p>
+					Der am <i>Wagen</i> montierte Medium Motor dient dem Abliefern des sich im Schacht des Wagen befindlichen Chips. Er ist über einen einfachen Schubkurbel-Mechanismus mit dem linear gelagerten Sicherungsstift (Lego Achse) im Schacht verbunden und kann diesen so ein- und ausfahren. 
+					</p>
+					<img class="featured-image img-fluid" src="assets/img/Wagen_03.JPG" alt="Motor">
+					<cite> <small> Abbildung 16 </small> </cite>
+					<br><br>
+					<p>
+					Zusätzlich befindet sich zwischen dem Motor und dem Kolbenmechanismus eine Rutschkupplung die über einen in der Antriebswelle liegenden blauen Axle Pin mit Reibungsfugen und einen 3L Technic Beam realisiert wird. So verhindern wir, dass der Anschlag des Mechanismus, aber auch unsachgemäßer Gebrauch zu Schaden am Roboters, oder an Personen führen kann. Im vergleich zum <i>Antriebsmotor</i> trennt die Kupplung schon bei einem sehr geringen Drehmoment. Der Motor ist über ein 50cm Kabel auf der Rückseite des Roboters mit dem Ausgang “OutB” verbunden und kann so über die gesamte Weglänge des Wagens frei bewegt werden.
+				</p>
+
+				<h4><a id="LMotor">Large Motor “Antriebsmotor”</a></h4>
+				
+				<img class="featured-image img-fluid" src="assets/img/Large_Motor_01.JPG" alt="Motor">
+				<cite> <small> Abbildung 17 </small> </cite>
+				<br><br>
+				<p>
+					Der Antriebsmotor des Roboters befindet sich auf der Rückseite des Roboters hinter dem <i>Brick</i> und ist fest am <i>Gerüst</i> montiert. Er ist wie auch der <i>Medium Motor</i> mit einer Rutschkupplung versehen um bei unsachgemäßem Gebrauch, aber auch Programmfehlern Schaden am Roboter, oder gar Personen zu vermeiden. 
+					</p>
+					<img class="featured-image img-fluid" src="assets/img/Mechanism_01.JPG" alt="Motor">
+					<cite> <small> Abbildung 18 </small> </cite>
+					<br><br>
+					<p>
+					Der Mechanismus dahinter besteht aus einem schwarzen 3L Stop Bush Pin mit Reibungsfugen und zwei 3L Tehnic Beams, wodurch eine Trennung der Kupplung im Vergleich zum <i>Medium Motor</i> bei einem höheren Drehmoment erfolgt. Über eine 3:1 Reduktion ist der Motor weiterhin mit dem Brick-Seitigen Umlenkmechanismus der <i>Antriebskette</i> verbunden. Auf diese Weise steuert der Motor mit großer Kraft und Präzision die Position des Wagens und trägt so fast alle wesentlichen Aufgaben und Bewegungen des Roboters. Er ist über ein 25cm Kabel mit den Ausgang “OutB” verbunden.
+				</p>
+
+				<h4><a id="ChipDisp">Chip Dispenser</a></h4>
+				
+				<img class="featured-image img-fluid" src="assets/img/Reservoir.JPG" alt="Chip-Dispenser">
+				<cite> <small> Abbildung 19 </small> </cite>
+				<br><br>
+
+				<p>
+					Zu beiden Seiten des Roboters finden sich die Chip Dispenser. Sie bestehen aus einem einem abnehmbaren <i>Chip Reservoir</i> und dem darunterliegenden fest montierten <i>Dispenser Mechanismus</i>. Die Chip Reservoirs selbst beherbergen je einen Stapel an Chips einer Farbe und sorgen dafür, dass die Stapel nicht verrutschen und einfach nachgefüllt werden können. Die Dispenser Mechanismen drücken beim Befüllen des <i>Wagens</i> jeweils einen Chip aus dem Chip Reservoir heraus und in die Laderampe, von woaus er in den Schacht des Wagens gleitet.
+					<br>
+					<br>
+					Dieser Bewegungsablauf wird vom Wagen selbst ausgelöst. Dazu dient ein Hebelmechanismus, der über die Bewegung des Wagens die Kraft des <i>Antriebsmotors</i> auf einen linearen Führung (bestehend aus zwei parallelen Lego Achsen und vier Gleitpunkten) umlenkt und so auf eine Nadel (Lego Achse) überträgt, die dann den jeweils untersten Chip aus dem Reservoir herausschiebt. Um Parallelität sicherzustellen kann die Position der Führungsachsen von Hand justiert werden, um die leicht ungenauen Lego-Abmessungen auszugleichen. Somit kann gewährleistet werden, dass der Prozess verlässlich und mit minimaler Reibung abläuft. Die Position der Nadel und somit der Zeitpunkt des Auslösens kann ebenfalls per Hand justiert werden.
+					<br>
+					<img class="featured-image img-fluid" src="assets/img/Mechanism_03.JPG" alt="Reservoir">
+					<cite> <small> Abbildung 20 </small> </cite>
+					<br><br>
+					<br>
+					Um den Mechanismus zurückzusetzen und Platz für einen neuen Chip an der untersten Position des Stapels zu schaffen muss die Nadel wieder unter dem Stapel hervorgezogen werden. Um diesen Vorgang mechanisch schlicht zu halten benutzen wir an dieser Stelle ein einfaches Gegengewicht, das über einen Seilzug mit Umlenkrolle direkt am Hebelarm befestigt ist. Im Gegensatz zu einem Federzug bietet dies den Vorteil einer konstanten Kraft unabhängig von der Auslenkung des Mechanismus, insbesondere auch am Ende des Bewegungsablaufes. Die Gewichte bestehen ausschließlich aus Lego Technic und haben je eine Masse von ungefähr 30g, wobei etwa 24.5g auf die verwendete 18mm Technic Stahlkugel zurückfallen. Neben dem <i>Farbstreifen</i> aus Papier und Tesafilm und dem Vier-Gewinnt-Spiel selbst stellen die zur Befestigung der Gewichte verwendeten Schnüre die einzigen Nicht-Lego-Bestandteile des Roboters dar.
+					<br>
+					<img class="featured-image img-fluid" src="assets/img/Weight_01.JPG" alt="Reservoir">
+					<cite> <small> Abbildung 21 </small> </cite>
+					<br>
+					Zum Transport des Roboters können die <i>Chip Reservoirs</i> und <i>Gegengewichte</i> einfach abgenommen werden. Auch die <i>Dispenser Mechanismen</i> lassen sich mit wenigen Handgriffen leicht entfernen.
+				</p>
+
+				<h4><a id="Geruest">Gerüst</a></h4>
+				
+				<img class="featured-image img-fluid" src="assets/img/Geruest_02.JPG" alt="Gerüst">
+				<cite> <small> Abbildung 22 </small> </cite>
+				<br><br>
+
+				<p>
+					Das Gerüst des Roboters trägt das Gewicht aller Bauteile. Es ist möglichst schlicht, aber stabil gehalten und benutzt an wichtigen Stellen Dreieckskonstruktionen zur Versteifung. Einen Teil seiner Stabilität erhält das Gerüst auch aufgrund der Lego-kompatiblen Maße des Spielbretts, in das es mit einem leichten Pressure Fit passend eingearbeitet ist.
+				</p>
+
+				<h4><a id="Controller">Controller</a></h4>
+				
+				<img class="featured-image img-fluid" src="assets/img/Controller_01.JPG" alt="Controller">
+				<cite> <small> Abbildung 23 </small> </cite>
+				<br><br>
+
+				<p>
+					Neben den <i>Druckknöpfen</i> am <i>Brick</i> bietet auch ein einfacher Controller die Möglichkeit den Roboter zu steuern. Er besteht aus einem Chassi mit zwei Drucksensoren, die mit den Daumen ausgelöst werden können und je mit einem 50cm Kabel mit den Eingängen “In1” und “In2” verbunden sind. Da ohne den Controller nur je zwei der vier Sensor- und Motor-Steckplätze am Brick verwendet werden besteht die Möglichkeit den Roboter um zusätzliche Funktionalitäten zu erweitern. Der Controller ist zur Funktion des Roboters also nicht zwingend notwendig und soll einen Ausblick auf die Erweiterbarkeit bieten. Mehr dazu im Kapitel “Ausblick”.
+					<br>
+					<br>
+					Die Steuerung mittels Controller erfolgt über die beiden Drucksensoren. Dabei entsprechen der rechte, bzw. linke Drucksensor den jeweiligen Bewegungsrichtungen. Drückt man beide Knöpfe gleichzeitig wird nach einem kurzen Moment die Position bestätigt.<br>
+					<br>
+					Sollte sich dafür entschieden werden, den Controller zu entfernen, müssen erst einige Codestellen auskommentiert werden, um das Spiel weiter spielen zu können. Der Brick erwartet ansonsten weiterhin zwei Sensoren an “In1” und “In2.
+				</p>
+				
+				
+				<h3><a id="Code"> Code </a></h3>  
+				<p>
+					 Übersicht über unseren Code aufgeteilt in Klassen 
+				</p>
+				
+				<img class="featured-image img-fluid" src="assets/img/Klassendiagramm.png" alt="Klassendiagramm">
+				<cite> <small> Abbildung 24 </small> </cite>
+				<br><br>
+
+				<p>
+					Ablauf eines Spielablaufs
+					<br>
+				
+					In dem Fließdiagramm (Abb. #) wird der Ablauf des Spiels dargestellt. Solange keine Gewinner festegstellt wird spielen abwechselnd einmal der Roboter und einmal der Mensch. Am Ende jeden Zuges wird dann die Variable "Spieler" aktualisiert und der Spielzug an den nächsten weitergegeben. 
+					</p>
+					<img class="featured-image img-fluid" src="assets/img/Spielablauf.png" alt="Spielablauf">
+					<cite> <small> Abbildung 25 </small> </cite>
+					<br><br>
+					<p>
+					Ein Spielzug sieht folgendermaßen aus: Als erstes wird geschaut, welche Farbe jedem Spieler zugeteilt ist. Je nachdem ob es die Farbe gelb oder rot ist, fährt der Wagen zur entsprechenden Seite und nimmt einen neuen Stein auf. Auf der Seite der roten Steine wird außerdem eine Kalibrierung durchgeführt, so wird nach jedem zweiten Spielzug auf mögliche, sich verändernde Lichtverhältnisse eingestellt. Der Spieler hat anschließend die Möglichkeit den Roboter manuel zur gewünschten Spalte zu fahren. Anhand des Farbcodes auf der Rückseite des Spielbretts kann die Position des Wagens genau erfasst werden. Die Information über den Standort des Wagens wird anschließend auch bei dem fallen lassen des Chips benötigt, um den Spielstein in das digitale Spielbrett einzutragen. Ist der Roboter am Zug, berechnet er zunächst seinen Spielzug und fährt anschließend zu entsprechenden Spalte, wo er den Stein fallen lässt. Auch dann wird er Stein in das digitale Spielbrett eingetragen. In den folgenden Abschnitten wird noch einmal näher auf den Code eingegangen und die einzelnen Funktionen noch einmal näher erläutert. Für die Ansteuerung der Motoren und Sensoren des Bricks wurde dabei vor allem auf zwei Internetseiten zugegriffen. Sowohl Hempel (2015 unter https://ev3dev-lang.readthedocs.io/projects/python-ev3dev/en/stable/index.html) als auch EV3 Python (n.d. unter https://sites.google.com/site/ev3devpython/learn_ev3_python) haben zur Ansteuerung das das Packet ev3dev2 genutzt. Im Gegensatz zu ev3dev.ev3 war dieses Packet mit dem Linux Kernel des Bricks for ev3dev-jessie kompatibel. Auf den antsprechenden Unterseiten können verschiedene Codebeispiele und Erklärungen betrachtet werden.
+					<br>  
+				</p>
+				
+				<h4>play.py</h4>
+				<a class="nav-link" href="Play.html">Unser Sourcecode zu Play </a>
+
+				<p>Play ist die Klasse, die einen Spielzug strukturiert. Sie erstellt außerdem die Klassen Robot() und Connect4(). 
+					<ul>
+					
+					  	<li><b>humansPlayerTurn(color):</b><br>
+						Überprüft zunächst welche Farbe dem Spieler zugeteilt ist. Anschließend wird der entsprechende Spielstein geholt. Die verschiedenen Funktionen der Klasse Robot werden aufgerufen und der Spielzug des Spielers ausgeführt.
+					</li><br>
+					 <li><b>robotPlayerTurn(color):</b><br>
+						Überprüft zunächst welche Farbe dem Roboter zugeteilt ist. Anschließend wird der entsprechende Spielstein geholt. Die verschiedenen Funktionen der Klasse Robot, sowie der Minimax-Algorithmus werden aufgerufen und der Spielzug des Roboters ausgeführt.
+					</li><br>
+					</ul>
+				</p>
+
+				<h4>Board</h4>
+				<a class="nav-link" href="Board.html">Unser Sourcecode zu Board </a>
+
+				<p>
+					Die Klasse Board stellt ein digitales Spielbrett zu Verfügung, in das die Spielzüge des Spielers und des Roboters eingetragen werden. Das digitale Brett wird von einem Numpy Array aus sechs mal sieben Spalten repräsentiert.
+				</p>
+
+				<ul>
+					<li><b>enterPiece (player, col):</b><br>
+						Fügt einen Stein in das Spielbrett in die Spalte ‚col‘ ein und simuliert dabei den Fall eines Spielsteines. Dabei wird überprüft, ob eine entsprechende Spalte schon voll ist oder ob sie außerhalb des Spielbretts liegt, um die ausgewählte Spalte neu zu setzen.
+					</li><br>
+
+
+					<li><b>selectableColumns():</b><br>
+						Wird von enterPiece(player, col) aufgerufen und gibt die Spalten zurück, die noch Platz für einen weiteren Stein haben.
+					</li><br>
+
+
+					<li><b>checkForStreak(streak):</b><br>
+						Sucht nach Spielsteinen, die nebeneinander liegen. Dabei werden allerdings nur zwei und drei nebeneinander liegenden Steinen betrachtet. Diese Information wird von dem Roboter genutzt, um den nächsten Spielzug zu berechnen.
+					</li><br>
+
+					<li><b>checkForWinner():</b><br>
+						Wie die Funktion checkForStreak(streak) sucht diese Funktion nach nebeneinander liegenden Spielsteine. Hier werden ausschließlich nach vier nebeneinander liegenden Steinen gesucht. Wurden diese gefunden ist das Spiel zuende.
+					</li><br> 
+				</ul>
+				
+				
+				<h4><a id="ColorHandler">ColorHandler</a></h4> 
+				<a class="nav-link" href="ColorHandler.html">Unser Sourcecode zu Color Handler </a>
+				<p>
+					Der Color Handler ist eine Klasse, in die zur Übersicht die Auswertung des <a href="#FSensor">Farbsensors</a> auslagert wurde. Beim ersten Aufruf der Klasse wird der Farbsensor des Roboters initialisiert. Wir verwenden in diesem Projekt den Modus ‘REF-RAW’. Dabei gibt der Farbsensor Werte zwischen 0 und 400 zurück, die der gemessenen Intensität des roten Farbkanals entsprechen.
+					<br>
+					<br>
+					ColorHandler beinhaltet sechs Methoden, die alle zur Auswertung der Daten vom Farbsensor dienen:</p>
+					<ul>
+					<li><b>calibrateBoundary():</b><br>
+							Zur Berechnung eines Schwellwerts zur Einteilung der Messwerte in Schwarz und Weiß. Dieser Schwellwert ist größtenteils abhängig vom Umgebungslicht, weswegen diese Methode je zu Beginn des roten Zuges aufgerufen wird, um den Boundary-Wert kontinuierlich im Laufe des Spiels anzupassen.</li><br>
+						
+					<li><b>getAvgIntensity():</b><br>
+					Zur Berechnung des aktuellen Intensitätswerts aus vier schnell aufeinanderfolgenden Messwerten und daraus resultierend zur Vermeidung von unvorhergesehenen Schwankungen und Fehlmessungen.</li><br>
+					
+					<li><b>currentColor():</b><br>
+						Zur Einordnung des berechneten Werts aus <code>getAvgIntensity()</code> anhand des Boundarywerts.</li><br>
+					
+					<li><b>colorChanged():</b><br>
+					Zur Detektion eines Farbwechsels anhand eines Vergleichs zwischen dem letzen und einem aktuellen Aufruf von <code>currentColor()</code>. Die Methode wird als Vorbedingung für die beiden folgenden Methoden benötigt.</li><br>
+					
+					<li><b>BlackToWhite():</b><br>
+						Zur Detektion eines Farbwechsels von Schwarz nach Weiß anhand von <code>colorChanged()</code> und dem letzten Aufruf von <code>currentColor()</code>.</li><br>
+					
+					<li><b>WhiteToBlack():</b><br>
+					Zur Detektion eines Farbwechsels von Weiß nach Schwarz anhand von <code>colorChanged()</code> und dem letzten Aufruf von <code>currentColor()</code>.</li>
+					</ul>
+					<p>Außerdem werden im Color Handler in einigen Variablen laufende Werte der Farbauswertung, wie <code>colorNow</code>, <code>maxvalue</code> und <code>boundary</code> festgehalten, die zur Funktion der Methoden benötigt werden. Die Möglichkeit, in der Zukunft einen zusätzlichen definitiven Schwarzwert für die Kalibrierung mit <code>calibrateBoundary()</code> heranzuziehen wird offengehalten.
+				</p>
+				
+				<h4>Connect4</h4>
+				<a class="nav-link" href="Connect4.html">Unser Sourcecode zu Connect4 </a>
+				<p>
+					Die Klasse Connect4 steht ganz am Anfang der Entwicklung des Codes, die im Dezember 2019 begann. Connect4 beinhaltete zunächst einige Methoden zum Erstellen eines virtuellen Spielbretts, zur Bildschirmausgabe, sowie zur Siegerkennung nach einem Zug, bzw. in einem als Parameter übergebenen Board. Damals noch ohne gegnerische AI konnten zwei Spieler gegeneinander spielen und die richtigkeit der Siegerkennung testen. Connect4 ist uns bis zum heutigen Tag erhalten geblieben, wobei sich einige Aspekte der Klasse stark gewandelt haben. Was erhalten geblieben ist ist unter anderem die Bildschirmausgabe, die zur Entwicklung des Minimax Algorithmus unerlässlich war. Führt man Connect4.py in der Konsole aus kann man hier in der heutigen Version direkt gegen die AI antreten.
+					<br>
+				</p>
+				Die Klasse Connect4 ist in der aktuellen Konfiguration des Codes für die Verwaltung des virtuellen Boards, sowie die Auswertung der Siegzustände verantwortlich.
+				<br>
+				<br>
+				Sie beinhaltet insgesamt 11 Methoden, die in ihrer Komplexität stark variieren und unterschiedliche Aufgaben erfüllen:</p>
+				<ul>
+					<li><b>showBoard():</b><br>
+						Zur Ausgabe einer Repräsentation des Virtuellen Spielbretts in der Konsole. Hierfür wird die Bibliothek <code>colorama</code> verwendet.
+					</li>
+					<li><b>showIndicators():</b><br>
+						Zur Ausgabe einer Zeile mit Indikatoren für das durch <code>showBoard()</code> angezeigte Spielbrett.
+					</li>
+					<li><b>showTurnOrder():</b><br>
+						Zur Ausgabe des aktuellen Spielers. Im normalen Gebrauch könnten die letzten drei Methoden zusammengelegt werden, allerdings war es aus Debugging-Gründen oft sinnvoller, einzelne Komponenten der Bildschirmausgabe auskommentieren zu können.</li>
+					<li><b>readInputFromConsole():</b><br>
+						Zur Verwendung mit der Konsole
+					</li>
+					<li><b>calculateResponses():</b>
+						Zur Berechnung des besten Zuges durch <code> Minimax </code>
+						<br>
+					</li>
+				</ul>
+				<br>
+				<br>
+				
+				<h4>Minimax</h4>
+				<a class="nav-link" href="Minimax.html">Unser Sourcecode zu Minimax </a>
+				<p>
+					Die Klasse Minimax ist dazu da, dass unser Roboter mehrere Züge im Voraus den besten aussucht und diesen mit der Methode <code>bestMove()</code> zurückgibt.
+					<br>
+					<br>
+					Minimax beinhaltet drei Methoden, die alle zur Bestimmung des besten Zuges sind:</p>
+					<ul>
+					<li><b>bestMove():</b><br>
+						Zur Berechnung des besten Zuges unter rekuriven Verwendung von <code>search()</code> 
+					</li><br>
+						
+					<li><b>search():</b><br>
+						Zur Berechnung des besten Alpha Wertes unter allen durch den <strong>Minimax-Baum</strong> aufgespannten Möglichkeiten.
+					</li><br>
+					
+					<li><b>value():</b><br>
+						Zur Bereschnung des Alpha Wertes mit Heureustik aus <code>checkForStreak()</code> für zweier Reihen, dreier Reihen, vierer Reihen und vierer Reihen des Gegenspielers zu einem gegebenen <code>Board</code>.
+					</li><br>
+					</ul>
+				</p>
+				
+				<h4>Robot</h4>
+				<a class="nav-link" href="Robot.html">Unser Sourcecode zu Robot </a>
+				<p> 
+					Die Klasse Robot ist für die Steuerung sämtlicher Lego-Komponenten verantwortlich. Beim ersten Aufrufen der Klasse werden am Brick die Drucksensoren und Motoren initialisiert, außerdem wird sofort eine Instanz von <code><a href="#ColorHandler">ColorHandler()</a></code> erzeugt, die den Farbsensor initialisiert.<br>
+					<br>
+					Robot enthält fünf Methoden, die alle zur Manipulation des <a href="#Wagen">Wagens</a> dienen:
+				</p>  
+				
+				<ul>
+					<li><b>manualControll():</b>
+						<br>
+						Zur Steuerung des Wagens durch den Spieler in der Hauptphase seines Spielzuges. Manual Controll lässt den Spieler über die <a href="#Brick">Knöpfe am Brick</a>, bzw die <a href="#Controller">Drucksensoren am Controller</a> kontinuierlich Eingaben tätigen, die ich Echtzeit in Bewegungen des Wagens übersetzt werden. Dazu steuert die Methode das verhalten des <a href="#LMotor">Antriebsmotors</a>. Die Methode behält stets einen Überblick über die Position des Wagens und updated entsprechende Werte, falls nötig. Auf diese Weise kann der Spieler eine Position für seinen Zug auswählen und anschließend bestätigen.
+					</li>
+					<br>
+
+					<li><b>driveToColumn():</b>
+						<br>
+						Zur Steuerung des Wagens durch den Roboter in der Hauptphase seines Spielzuges. Manual Controll nimmt eine Ziel-Position auf dem Spielbrett als Parameter und fährt den Wagen von seiner aktuellen Position zur übergebenen. Dazu steuert die Methode das verhalten des <a href="#LMotor">Antriebsmotors</a>. Die Methode behält stets einen Überblick über die Position des Wagens und updated entsprechende Werte, falls nötig.
+					</li>
+					<br>
+
+					<li><b>releaseCoin():</b><br>
+						Zur Steuerung des <a href="#MMotor">Medium Motors am Wagen</a>. Die Methode jeweils nach <code>manualControll()</code> und <code>driveToColumn()</code> aufgerufen. Sie stellt das Ende eines Spielzuges dar.
+					</li>
+					<br>
+					
+					<li><b>getRedCoin():</b><br>
+						Die Methode wird am Anfang des roten Spielzuges aufgerufen und Steuert den Bewegungsablauf zum Erhalt eines roten Chips und veranlasst die Kalibrierung der Farbauswertung. Der Wagen fährt dazu so lange nach links, bis der <a href="#DSensor">Kalibrierungs-Sensor</a> auf der roten Spielbrettseite ausgelöst wird, wodurch auch der rote <a href="#ChipDisp">Chip-Dispenser-Mechanismus</a> betätigt wird. Die Methode ruft daraufhin <code>calibrateBoundary()</code> im <a href="#ColorHandler">Color Handler</a> auf, um den Boundarywert neu zu berechnen. Anschließend wird der Wagen, der jetzt einen roten Chip mit sich führt auf Position 1 bewegt.
+					</li>
+					<br>
+						
+					<li><b>getYellowCoin():</b><br>
+						Die Methode wird am Anfang des gelben Spielzuges aufgerufen und Steuert den Bewegungsablauf zum Erhalt eines gelben Chips. Der Wagen fährt dazu so lange nach rechts, bis er Position 9 erreicht, wodurch auch der gelbe <a href="#ChipDisp">Chip-Dispenser-Mechanismus</a> betätigt wird. Anschließend wird der Wagen, der jetzt einen gelben Chip mit sich führt auf Position 7 bewegt.
+					</li>
+				</ul>
+				
+				<p> 
+					Die Klasse beinhaltet außerdem noch einige Variablen zur einfachen Anpassung von Motordrehgeschwindigkeiten, sowie eine Debugging-Ausgabemethode.
+				</p>
+
+
+				<h2><a id="Anleitung"> Verbindung zum EV3-Brick </a></h2>
+				<p> 
+					Zur Inbetriebnahme des Roboters haben wir mit ihm über eine "ssh-Verbindung" kommuniziert, die wir über die Shell ansteuern können. (Für weitere Informationen über die ssh-Verbindung siehe Linuxize.com 2020.) Die notwendigen Befehle werden auch auf der Seite von ev3dev.org beschrieben (vgl. ev3dev n.d.). Zunächst wird die Verbidung mit   
+				</p>
+				
+				<code>
+					$ ssh robot@ev3dev.local
+				</code>  
+				<p>
+					und dem Passwort "maker" gestartet. Über die Shell kann man nun auf das Verzeichnis des Roboters zugreifen. Um Dateien in das Verzeichnis des Roboters zu kopieren haben wir den Befehl "secure copy (scp)" genutzt. Dabei haben wir von dem Computer auf den Roboter zugegriffen. Der Befehl ist so aufgebaut, dass zunächst die lokale, zu kopierende Datei ausgwählt wird und anschließend die ssh-Verbindung zum Brick hergestellt wir und der dortige Speicherpfad, sowie Dateiname. Mit der -r flag des "save copy" können außerdem ganze Ordner auf den Brick kopiert werden.
+				<p>
+				<code>
+					$ scp Pfad/zur/kopierenden/Datei/Dateiname.py robot@ev3dev.local:home/robot/Dateiname.py
+				</code>
+				
+				<h2><a id="Probleme"> Aufgetretene Probleme</a></h2>
+				<h3><a id="Freiheiten"> Zu große User-Freiheit in der Methode manualControl(): </a></h3>
+				<p>
+					In der momentanen Version des Codes hat der User zu viele Freiheiten. Eine Freiheit, die dem Spieler bereits genommen wurde ist die Fähigkeit, Chips außerhalb des Spielbretts einzuwerfen. Der Wagen stoppt dazu vor Erreichen des Spielfeldrandes in der Mitte des äußersten Feldes und lässt sich nicht weiter zum Rand hin bewegen. Legt der Spieler es darauf an, kann er zur Zeit dennoch weitere Probleme hervorrufen:
+				</p>
+
+				<h3>Chips Zwischen Spalten</h3>
+				<p>
+					<b>Problem:</b><br>
+					Der Spieler kann aufgrund der freien Steuerung einen Chip zwischen zwei Spalten einwerfen. In 50% der Fälle führt dies dazu, dass der Chip, abhängig von der Intention, in die falsche Spalte im realen Board fällt, oder in der falschen Spalte im Digitalen Board eingetragen wird. In beiden Fällen sind die beiden Spielbretter danach nicht mehr synchron und es kommt im weiteren Spielverlauf zu Fehlern.
+					<br>
+					<br>
+					<b>Lösung:</b>
+					<br>
+					Beim Einwerfen eines Chips fährt der Wagen zuerst zur Spaltenmitte. Dies lässt sich über den Farbübergang in der Spaltenmitte problemlos implementieren und wurde bereit in der oben erwähnten Optimierung genutzt. Der entsprechende Code müsste lediglich ans Ende der Methode manualControll() eingefügt werden.
+					<br>
+				</p>
+				<h3>Chips in vollen Spalten</h3>
+				<p>
+					<b>Problem:</b><br>
+					Momentan hindert den Spieler nichts daran, zu versuchen, einen Chip in einer vollen Spalte zu einzuwerfen. Das Spiel wird in diesem Fall mit einem Error abgebrochen.<br>
+					<br>
+					<b>Lösung:</b><br>
+					Eine einfache Abfrage in der Methode manualControll() kann dieses Verhalten verhindern und müsste implementiert werden.
+				</p>
+
+				<h3><a id="Off-by-One"> Off-by-One-Fehler in getYellowCoin(): </a></h3>
+				<p>
+					In der Momentanen Version des Codes tritt beim, bzw. kurz vor dem Aufrufen der Methode getYellowCoin(), die den Roboter veranlasst, zum rechten Chip Dispenser zu fahren, ein Off-by-One-Fehler au. Der Roboter beginnt dadurch seine Fahrt intern eine Spalte zu weit rechts. Er fährt dann nur bis zum tatsächlichen Position 7-rechts statt zur Position 9, erhält dadurch keinen gelben Chip und startet seinen Zug genau eine Spalte zu weit in der Spielfeldmitte, was den Rest des Zuges bis zur Rekalibriereung beeinträchtigt und unter umständen zu einem Synchronisationsverlust zwischen dem realen und dem virtuellen Spielbrett führen kann. Da der Fehler kurz vor, bzw. beim Aufruf der Methode auftritt scheint es sich um einen Softwarefehler zu handeln, der bis zur Abgabe leider <b>noch nicht identifiziert</b> werden konnte. Sollte der Roboter weiterentwickelt werden, würde dieser Fehler gefunden und behoben werden müssen.
+				</p>
+				
+				<h2><a id="Ausblick"> Ausblick </a></h2>
+				<p>
+					Der Roboter erfüllt in seiner aktuellen Fassung die Grundanforderungen der Aufgabenstellung, allerdings ist auch noch Raum für Verbesserungen (vgl. <a href="#Probleme">Aufgetretene Probleme</a>), die umgesetzt und implementiert werden sollten. Es bietet sich aber auch die Möglichkeit einiger Erweiterungen. Von Beginn des Projekts an war es unser Ziel, die Plattform des Lego-Connect-4-Roboters mit so wenig Motoren und Sensoren auszustatten wie nötig, um dadurch eine gute Erweiterbarkeit des Roboters erreichen zu können. Aus diesem Grund belegen wir am <a href="#Brick">Brick</a> in der aktuellen Fassung des ROboters auch nur die Hälfte der Ein- und Ausgänge, sodass es noch je zwei freie Sensor- und Motorenslots gibt. Die beiden freien Sensorslots wurde zwar zur Demonstration mit dem <a href="#Controller">Controller</a> verbunden, können aber sehr einfach umfunktioniert werden, da es sich nicht um ein essentielles Bauteil handelt, sondern ein Add-On.<br>
+					<br>
+				Einige weitere Erweiterungs- und Add-On-Ideen könnten daher wie folgt aussehen:</p>
+				<ul>
+					<li><b>Erweiterte Kommunikation mit dem Spieler</b><br>
+						Momentan ist die Kommunikation mit dem Spieler ausreichend, aber noch sehr rudimentär. Es wäre einfach, sie durch eine oder mehrere Erweiterungen zu verbessern. Beispielsweise könnte hierfür ein mechanisches Interface mit ein bis zwei Motoren konstruiert werden, dass dem Spieler den aktuellen Spielzustand mitteilt und/oder weitere Informationen zum Spiel wie die verbleibende Zahl möglicher Züge zur Hand gibt. Alternativ stehen hierfür auch die LEDs des Bricks, das Display des Bricks, oder sogar die EV3dev eigene Sprachausgabe zur Verfügung.
+					</li>
+					<br>
+					
+					<li><b>Automatischer Chip-Sortierer</b><br>
+						Unter Verwendung eines weiteren Farbsensors und von einem bis zwei weiteren Motoren sollte es leicht möglich sein, den Roboter selbst in die Lage zu versetzen, das Spiel zu reseten – optimalerweise effizienter und einfacher als dies für einen Menschen möglich wäre. Anleitungen zu Algorithemn und Bauprojekten zur Sortierung von Objekten anhand ihrer Farbe sind im Internet leicht zu finden (vgl. Akiyuki 2015). Interessant wäre es sicherlich, auch hier das Konzept der Mehrfachbenutzung anzuwenden und bestehenden Teilen des Roboters weitere Aufgaben zuzuteilen. Den Roboter um eine derartige Fähigkeit zu erweitern wäre eine spannende Anwengungs- und Anpassungs-Aufgabe für Interessierte.
+					</li>
+					<br>
+						
+					<li><b>Automatische Erkennung des Spielbretts</b><br>
+						Dieses Projekt würde die Manuelle Wagensteuerung des Roboters obsolet machen, da es dem Spieler ermöglichen würde, seinen Chip direkt in das Spielbrett einzuwerfen, was für den Spieler das Spielinterface deutlich natürlicher gestalten würde. Funktionierende Projekte dieser Kategorie existieren bereits als Orientierung. Bei der Umsetzung hätte die betreffende Gruppe die Wahl, eine softwarelastigere Variante mit einer Webcam und selbstgeschriebener Bildauswertungssoftware, oder eine mechanisch/sensorisch aufwändigere Variante über einen weiteren Farbsensor und ggf. einen weiteren Motor als zusätzlichen Freiheitsgrad zu wählen. Interessant wäre es sicherlich, das Konzept der Mehrfachbenutzung auch hier anzuwenden. Dieses Projekt ist aufwändig, würde den Roboter aber um einen großen Komfortfaktor erweitern und könnte für Interessierte eine gute Übung im Bereich der Bildverarbeitung sein.
+					</li>
+					<br>					
+				</ul>    
+				
+				<p>
+					Wir sind mit dem aktuellen Zustands nach der Fertigstellung zufrieden. Während einige Fehler zur vollendung des Projekts noch behoben werden sollten kann unser Roboter all das, was wir uns als Ziel gesetzt hatten. Spannend wäre es natürlich für uns zu sehen, ob und wie sich das Projekt in der Zukunft weiterentwickeln wird und ob die Möglichkeiten, die wir dazu bieten wollten genutzt werden.
+				</p>
+
+				<h2><a id="Literatur"> Literatur </a></h2>
+				<cite>
+					<small> 
+						<ul>
+							<li>
+								Akiyuki. (2015). Fast Ball Sorting Robot using EV3 . Retrieved June 24, 2020, from http://akiyuki.jp/en/works/466
+							</li>
+							<li>
+								ev3dev. (n.d.) Connecting to Ev3dev Using SSH. Retrieved June 24, 2020, from https://www.ev3dev.org/docs/tutorials/connecting-to-ev3dev-with-ssh/
+							</li>
+							<li>
+								EV3 Python. (n.d.) Learn EV3 Python. Retrieved June 29, 2020, from https://sites.google.com/site/ev3devpython/learn_ev3_python
+							</li>
+							<li>
+								Hempel, R. (2015). Python language bindings for ev3dev . Retrieved June 29, 2020, from https://ev3dev-lang.readthedocs.io/projects/python-ev3dev/en/stable/index.html.
+							</li>
+							<li>
+								Linuxize.com. (2020). How to Enable SSH on Ubuntu 18.04. Retrieved June 29, 2020, from https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-18-04/
+							</li>
+						</ul>
+					</small>				
+				</cite>
+				</div>
+			<!-- End Post Content -->
+
+			<!-- Begin Tags -->
+			<div class="after-post-tags">
+				<ul class="tags">
+					<li><a href="#">EV3Dev</a></li>
+					<li><a href="#">LEGO</a></li>
+					<li><a href="#">4-Gewinnt</a></li>
+					<li><a href="#">Python</a></li>
+				</ul>
+			</div>
+			<!-- End Tags -->
+
+		</div>
+		<!-- End Post -->
+
+	</div>
+</div>
+<!-- End Article
+================================================== -->
+
+<div class="hideshare"></div>
+
+
+<!-- Begin Footer
+================================================== -->
+<div class="container">
+	<div class="footer">
+		<p class="pull-left">
+			mediumish theme unter MIT License 2.0 | 2020 Lego Roboter 
+		</p>
+		<div class="clearfix">
+		</div>
+	</div>
+</div>
+<!-- End Footer
+================================================== -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="assets/js/mediumish.js"></script>
+<script src="assets/js/image-slide.js"></script>
+</body>
+</html>
